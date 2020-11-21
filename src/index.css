@@ -5,9 +5,7 @@
 }
 
 :root {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -36,22 +34,34 @@ body {
   padding: 0.25rem;
   height: 4rem;
   background-color: black;
+  overflow: hidden;
+}
+
+.display {
+  /* border: 1px dashed red; */
+}
+
+#display-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 #display-op,
 #display-ev {
-  color: white;
   text-align: right;
   font-family: digital;
 }
 
 #display-op {
+  justify-self: end;
   height: 1rem;
   color: #ff9500;
   margin-bottom: 0.35rem;
 }
 
 #display-ev {
+  color: white;
   font-size: 2rem;
   line-height: 2rem;
 }
@@ -65,7 +75,7 @@ body {
     ' seven   eight    nine    min'
     ' four    five     six     plus'
     '  one     two    three    eq'
-    ' zero    zero     dec    eq';
+    ' zero    zero     dec     eq';
 }
 
 .btn {
