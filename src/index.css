@@ -1,5 +1,10 @@
-body {
+* {
   margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
@@ -7,7 +12,126 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+body {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  background-color: #c2c2d6;
+  color: white;
+}
+
+#calculator {
+  margin: 1rem;
+  padding: 0.25rem;
+  width: 350px;
+  height: 400px;
+  background-color: black;
+  display: flex;
+  flex-direction: column;
+}
+
+#display {
+  padding: 0.25rem;
+  height: 4rem;
+  background-color: black;
+}
+
+#display-op,
+#display-ev {
+  color: white;
+  text-align: right;
+  font-family: digital;
+}
+
+#display-op {
+  height: 1rem;
+  color: #ff9500;
+  margin-bottom: 0.35rem;
+}
+
+#display-ev {
+  font-size: 2rem;
+  line-height: 2rem;
+}
+
+#grid {
+  flex: 1;
+  display: grid;
+  grid-gap: 1px;
+  grid-template-areas:
+    ' clear   clear   divide   mult'
+    ' seven   eight    nine    min'
+    ' four    five     six     plus'
+    '  one     two    three    eq'
+    ' zero    zero     dec    eq';
+}
+
+.btn {
+  color: white;
+  font-size: 1rem;
+  outline: none;
+}
+
+.op {
+  background-color: #666666;
+}
+
+.num {
+  background-color: #4d4d4d;
+}
+
+#clear {
+  grid-area: clear;
+  background-color: #ac3939;
+}
+#divide {
+  grid-area: divide;
+}
+#mult {
+  grid-area: mult;
+}
+#seven {
+  grid-area: seven;
+}
+#eight {
+  grid-area: eight;
+}
+#nine {
+  grid-area: nine;
+}
+#min {
+  grid-area: min;
+}
+#four {
+  grid-area: four;
+}
+#five {
+  grid-area: five;
+}
+#six {
+  grid-area: six;
+}
+#plus {
+  grid-area: plus;
+}
+#one {
+  grid-area: one;
+}
+#two {
+  grid-area: two;
+}
+#three {
+  grid-area: three;
+}
+#zero {
+  grid-area: zero;
+}
+#dec {
+  grid-area: dec;
+}
+#eq {
+  grid-area: eq;
+  background-color: #014466;
 }
