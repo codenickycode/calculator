@@ -5,28 +5,46 @@ import { evaluate } from './evaluate.js';
 
 console.clear();
 
-const INITIAL_STATE = {
-  start: true,
-  decimal: false,
-  decPlace: 0,
-  operating: false,
-  isNeg: false,
-  currentOperand: 0,
-  operation: [],
-  output: '',
-  toRepeat: [],
-};
+const MAX_INPUT_LENGTH = 14;
 
 class Calculator extends React.Component {
   constructor(props) {
     super(props);
-    this.state = INITIAL_STATE;
+    this.state = this.INITIAL_STATE();
     this.buttonClick = this.buttonClick.bind(this);
   }
 
+  INITIAL_STATE = () => ({
+    start: true,
+    newOperand: true,
+    decimal: false,
+    decPlace: 0,
+    operating: false,
+    isNeg: false,
+    currentOperand: 0,
+    operation: [0],
+    operationDisplay: [],
+    output: '0',
+    toRepeat: [],
+  });
+
+  INITIALIZE = () => this.setState(this.INITIAL_STATE());
+
   buttonClick(input) {
     // get all the current values from state
-    let { start, decimal, decPlace, operating, isNeg, currentOperand, operation, toRepeat } = this.state;
+    let {
+      start,
+      newOperand,
+      decimal,
+      decPlace,
+      operating,
+      isNeg,
+      currentOperand,
+    } = this.state;
+    // don't mutate state directly
+    let operation = [...this.state.operation];
+    let operationDisplay = [...this.state.operationDisplay];
+    let toRepeat = [...this.state.toRepeat];
 
     // if we previously converted to a string to
     // add decimal place zeros for display,
@@ -37,17 +55,18 @@ class Calculator extends React.Component {
       // ********* AC / BACKSPACE / DEL ********* //
       case 'clear':
         // re-initialize state
-        this.setState(INITIAL_STATE);
+        this.INITIALIZE();
         break;
 
       // ********* ENTER / = ********* //
       case 'Enter':
         if (start) {
-          // if we have a previous result
-          if (operation.length === 1) {
-            // insert prev result as first operand of toRepeat
-            toRepeat.splice(0, 1, operation[0]);
-            // and set that to the current operation
+          break;
+        }
+        if (newOperand) {
+          // if we have something to repeat
+          if (toRepeat.length === 3) {
+            // set that to the current operation
             operation = [...toRepeat];
           } else {
             // otherwise, do nothing
@@ -60,27 +79,33 @@ class Calculator extends React.Component {
           // push currentOperand to operation
           operation.push(currentOperand);
         }
-        // if we have a repeatable operation
-        if (operation.length === 3) {
-          // save it for later
-          toRepeat = [...operation];
-        }
+        // save last part for repeat
+        toRepeat = operation.slice(-2);
         // let the evaluation begin!
-        let evaluation = evaluate(operation);
-
-        // ********* TODO ********* //
-        // round decimal places
-
+        console.time('evaluation');
+        let evaluation = evaluate(...operation);
+        console.timeEnd('evaluation');
         // re-initialize state
-        this.setState(INITIAL_STATE);
-        // carry over evaluation and toRepeat operation
-        // display the evaluation as output
-        this.setState({
-          operation: [evaluation],
-          output: evaluation,
-          toRepeat: toRepeat,
-        });
-        // console.log(this.state);
+        this.INITIALIZE();
+        if (evaluation === 'dbz') {
+          this.setState({ output: 'ERROR: DIVIDE BY ZERO' });
+          break;
+        } else if (evaluation === 'max') {
+          this.setState({ output: 'ERROR: > MAX' });
+          break;
+        } else {
+          // convert back to Number from Decimal
+          evaluation = Number(evaluation);
+          // carry over evaluation and toRepeat operation
+          // display the evaluation as output
+          this.setState({
+            start: false,
+            operation: [evaluation],
+            operationDisplay: [...operation, '=', evaluation],
+            output: evaluation,
+            toRepeat: [evaluation, ...toRepeat],
+          });
+        }
         break;
 
       // ********* NUMBERS ********* //
@@ -94,13 +119,15 @@ class Calculator extends React.Component {
       case '7':
       case '8':
       case '9':
-        if (start) {
-          // clear carried over operation
-          this.setState({ start: false, operation: [] });
-        }
-        if (decPlace >= 4) {
-          // no smaller, sorry
+        if (
+          currentOperand.toString().length >= MAX_INPUT_LENGTH ||
+          decPlace >= MAX_INPUT_LENGTH
+        ) {
           break;
+        }
+        if (newOperand) {
+          // clear carried over operation
+          this.setState({ start: false, newOperand: false, operation: [] });
         }
         // convert to int
         let inputInt = parseInt(input);
@@ -120,26 +147,30 @@ class Calculator extends React.Component {
         }
         // add input in 1s place
         currentOperand += inputInt;
-        // ??
         if (decimal) {
-          // I think trying to get rid of precision errors
+          // add 0s
           currentOperand = currentOperand.toFixed(decPlace);
         }
         // continue creating the currentOperand
         this.setState({
           start: false,
+          newOperand: false,
           decPlace: decPlace,
           operating: false,
           currentOperand: currentOperand,
+          operationDisplay: [...operation, currentOperand],
           output: currentOperand,
         });
         break;
 
       // ********* DECIMAL ********* //
       case '.':
-        if (start) {
+        if (currentOperand.toString().length > MAX_INPUT_LENGTH) {
+          break;
+        }
+        if (newOperand) {
           // clear carried over operation
-          this.setState({ start: false, operation: [] });
+          this.setState({ start: false, newOperand: false, operation: [] });
         }
         if (!decimal) {
           // operand will now add decimal places
@@ -160,10 +191,10 @@ class Calculator extends React.Component {
       case '/':
       case '+':
       case '-':
-        // if we're just starting out,
-        if (start && input === '-' && operation.length !== 1) {
+        // if we're just newOperanding out,
+        if (newOperand && input === '-' && operation.length !== 1) {
           // it's a sign change (-)
-          this.setState({ isNeg: true, output: input });
+          this.setState({ start: false, isNeg: true, output: input });
           break;
         }
         // if there's already an operator
@@ -181,10 +212,10 @@ class Calculator extends React.Component {
           // but if we're not operating,
         } else {
           // and we've carried over a previous result,
-          if (start && operation.length === 1) {
+          if (newOperand && operation.length === 1) {
             // add just the inputed operator (no extra 0)
             operation.push(input);
-            start = false;
+            newOperand = false;
           } else {
             // push both currentOperand and inputed operator
             operation.push(currentOperand, input);
@@ -192,13 +223,15 @@ class Calculator extends React.Component {
         }
         // now we're 'operating'
         this.setState({
-          start: start,
+          start: false,
+          newOperand: newOperand,
           decimal: false,
           decPlace: 0,
           operating: true,
           isNeg: false,
           currentOperand: 0,
-          operation: operation,
+          operation: [...operation],
+          operationDisplay: [...operation],
           output: input,
           toRepeat: [],
         });
@@ -207,21 +240,28 @@ class Calculator extends React.Component {
       // this should never happen
       default:
         console.log('default');
-        break;
     }
-    // console.log(JSON.stringify(this.state));
-    // console.log(currentOperand);
   }
 
   render() {
+    let displayOp = this.state.operationDisplay;
+    // chop the leading 0 if it wasn't added explicitly
+    if (displayOp.length === 2 && displayOp[0] === 0 && !isNaN(displayOp[1])) {
+      displayOp.shift(0);
+    }
+    // convert to string
+    displayOp = displayOp.toString();
+    // remove all commas
+    displayOp = displayOp.replaceAll(',', ' ');
+
     return (
       <>
         <Display
           start={this.state.start}
+          newOperand={this.state.newOperand}
           operating={this.state.operating}
-          operation={this.state.operation}
+          displayOp={displayOp}
           output={this.state.output}
-          toRepeat={this.state.toRepeat}
         />
         <Buttons click={this.buttonClick} />
       </>

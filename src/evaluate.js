@@ -1,16 +1,28 @@
+// import Decimal from 'decimal.js-light';
+// import Decimal from 'decimal.js';
+
 // temporary variables
 let tempArr = [];
 let first = null;
 let second = null;
 let newOp = null;
+let dbzError = false;
 
 function divide(array, indexDivide, indexMultiply) {
   // preserve left to right order of operations
-  if ((indexDivide < indexMultiply || indexMultiply === -2) && indexDivide !== -2) {
+  if (
+    (indexDivide < indexMultiply || indexMultiply === -2) &&
+    indexDivide !== -2
+  ) {
     // remove the operation
     tempArr = array.splice(indexDivide, 3);
     first = tempArr[0];
     second = tempArr[2];
+    if (second === 0) {
+      // can't equate object value
+      dbzError = true;
+      return;
+    }
     // divide
     newOp = first / second;
     // insert operand where we removed operation
@@ -22,7 +34,10 @@ function divide(array, indexDivide, indexMultiply) {
 
 function multiply(array, indexMultiply, indexDivide) {
   // preserve left to right order of operations
-  if ((indexMultiply < indexDivide || indexDivide === -2) && indexMultiply !== -2) {
+  if (
+    (indexMultiply < indexDivide || indexDivide === -2) &&
+    indexMultiply !== -2
+  ) {
     // remove the operation
     tempArr = array.splice(indexMultiply, 3);
     first = tempArr[0];
@@ -68,7 +83,12 @@ function add(array, indexAdd, indexSubtract) {
   }
 }
 
-export function evaluate(array) {
+export function evaluate(...array) {
+  // if (Infinity in array) {
+  //   return Infinity;
+  // } else if (-Infinity in array) {
+  //   return -Infinity;
+  // }
   // base case
   while (array.length > 1) {
     // first index of each operator
@@ -85,6 +105,7 @@ export function evaluate(array) {
         indexDivide = array.indexOf('/') - 1;
         indexMultiply = array.indexOf('*') - 1;
         divide(array, indexDivide, indexMultiply);
+        if (dbzError) return 'dbz';
       }
       // if there's multiplication
       if (indexMultiply !== -2) {
@@ -113,5 +134,7 @@ export function evaluate(array) {
     }
   }
 
-  return array[0];
+  let result = array[0] > Number.MAX_VALUE ? 'max' : array[0];
+
+  return result;
 }
