@@ -30,50 +30,45 @@ function calculateInput(input, INITIAL_STATE, state) {
 
     // ********* ENTER / = ********* //
     case 'Enter':
-      let evaluation = evaluateArray('+', 0, 9, 1, 3);
-      return {
-        output: evaluation,
-      };
-      break;
-    //   if (newOperand) {
-    //     // if we have something to repeat
-    //     if (toRepeat.length === 3) {
-    //       // set that to the current operation
-    //       operation = [...toRepeat];
-    //     } else {
-    //       // otherwise, do nothing
-    //       break;
-    //     }
-    //   } else if (operating) {
-    //     // drop extra operator at end of operation
-    //     operation.pop();
-    //   } else {
-    //     // push currentOperand to operation
-    //     operation.push(currentOperand);
-    //   }
-    //   // save last part for repeat
-    //   toRepeat = operation.slice(-2);
-    //   // let the evaluation begin!
-    //   // console.time('evaluation');
-    //   let evaluation = evaluateArray(...operation);
-    //   // console.timeEnd('evaluation');
-    //   if (isNaN(evaluation)) {
-    //     // output error message
-    //     let newState = { output: evaluation };
-    //     return { ...init, ...newState };
-    //   } else {
-    //     // re-initialize,
-    //     // carry over evaluation and toRepeat operation
-    //     // display the evaluation as output
-    //     let newState = {
-    //       start: false,
-    //       operation: [evaluation],
-    //       operationDisplay: [...operation, '=', evaluation],
-    //       output: evaluation,
-    //       toRepeat: [evaluation, ...toRepeat],
-    //     };
-    //     return { ...init, ...newState };
-    //   }
+      if (newOperand) {
+        // if we have something to repeat
+        if (toRepeat.length === 3) {
+          // set that to the current operation
+          operation = [...toRepeat];
+        } else {
+          // otherwise, do nothing
+          break;
+        }
+      } else if (operating) {
+        // drop extra operator at end of operation
+        operation.pop();
+      } else {
+        // push currentOperand to operation
+        operation.push(currentOperand);
+      }
+      // save last part for repeat
+      toRepeat = operation.slice(-2);
+      // let the evaluation begin!
+      // console.time('evaluation');
+      let evaluation = evaluateArray(...operation);
+      // console.timeEnd('evaluation');
+      if (isNaN(evaluation)) {
+        // output error message
+        let newState = { output: evaluation };
+        return { ...init, ...newState };
+      } else {
+        // re-initialize,
+        // carry over evaluation and toRepeat operation
+        // display the evaluation as output
+        let newState = {
+          start: false,
+          operation: [evaluation],
+          operationDisplay: [...operation, '=', evaluation],
+          output: evaluation,
+          toRepeat: [evaluation, ...toRepeat],
+        };
+        return { ...init, ...newState };
+      }
 
     // ********* NUMBERS ********* //
     case '0':

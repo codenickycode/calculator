@@ -3,7 +3,7 @@ import Decimal from 'decimal.js-light';
 export function evaluateArray(...array) {
   const formatError = `
       evaluateArray.js Error: ${JSON.stringify(array)}
-      Array must follow precise format: [number, operator, number...]
+      Array format must be: [number, operator, number, operator, ... , number]
       Operators must be one of the following strings: '+' , '-' , '*' , '/' 
       `;
   if (array.length % 2 === 0) {
@@ -11,31 +11,26 @@ export function evaluateArray(...array) {
     return 'Error';
   }
 
-  // each operator's function and index of first operand (index-1)
+  // each operator's function and first index
   const op = {
     '/': {
-      index: array.indexOf('/') - 1,
+      index: array.indexOf('/'),
       operation: (first, second) =>
         second.isZero() ? 'dbz' : first.dividedBy(second),
     },
     '*': {
-      index: array.indexOf('*') - 1,
+      index: array.indexOf('*'),
       operation: (first, second) => first.times(second),
     },
     '-': {
-      index: array.indexOf('-') - 1,
+      index: array.indexOf('-'),
       operation: (first, second) => first.minus(second),
     },
     '+': {
-      index: array.indexOf('+') - 1,
+      index: array.indexOf('+'),
       operation: (first, second) => first.plus(second),
     },
   };
-  // TYPEERROR OP.EVERY IS NOT A FUNCTION
-  if (op.every((key) => op[key].index < 0)) {
-    console.log(formatError);
-    return 'Error';
-  }
 
   // Removes operation from array, replaces it with evaluation,
   // returns new index of current operator or error.
@@ -43,6 +38,15 @@ export function evaluateArray(...array) {
   // but converts back to a Number before returning.
   function evaluate(operator) {
     const index = array.indexOf(operator) - 1;
+    if (
+      index === -1 ||
+      array[index + 2] === undefined ||
+      isNaN(array[index]) ||
+      isNaN(array[index + 2])
+    ) {
+      console.log(formatError);
+      return 'Error';
+    }
     const first = Decimal(array[index]);
     const second = Decimal(array[index + 2]);
     let newNum = op[operator].operation(first, second);
@@ -50,17 +54,17 @@ export function evaluateArray(...array) {
     newNum = newNum.toNumber();
     if (newNum >= Number.MAX_VALUE || newNum === Infinity) return 'MAX VALUE';
     // insert operand where we removed operation
-    array.splice(op[operator].index, 3, newNum);
-    op[operator].index = array.indexOf(operator) - 1;
+    array.splice(index, 3, newNum);
+    op[operator].index = array.indexOf(operator);
   }
 
   // preserving order of operations,
   // first handle division and multiplication
-  while (op['/'].index !== -2 || op['*'].index !== -2) {
+  while (op['/'].index !== -1 || op['*'].index !== -1) {
     // preserve left to right
     if (
-      (op['/'].index < op['*'].index && op['/'].index !== -2) ||
-      op['*'].index === -2
+      (op['/'].index < op['*'].index && op['/'].index !== -1) ||
+      op['*'].index === -1
     ) {
       let error = evaluate('/');
       if (error) return error;
@@ -70,11 +74,11 @@ export function evaluateArray(...array) {
     }
   }
   // now handle addition and subtraction
-  while (op['+'].index !== -2 || op['-'].index !== -2) {
+  while (op['+'].index !== -1 || op['-'].index !== -1) {
     // preserve left to right
     if (
-      (op['+'].index < op['-'].index && op['+'].index !== -2) ||
-      op['-'].index === -2
+      (op['+'].index < op['-'].index && op['+'].index !== -1) ||
+      op['-'].index === -1
     ) {
       let error = evaluate('+');
       if (error) return error;
@@ -84,5 +88,9 @@ export function evaluateArray(...array) {
     }
   }
 
+  if (array.length > 1) {
+    console.log(formatError);
+    return 'Error';
+  }
   return array[0];
 }
