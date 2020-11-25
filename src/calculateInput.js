@@ -1,4 +1,4 @@
-import { evaluateArray } from './evaluateArray.js';
+import oooEvaluate from './oooEvaluate.js';
 
 function calculateInput(input, INITIAL_STATE, state) {
   const init = INITIAL_STATE();
@@ -50,7 +50,7 @@ function calculateInput(input, INITIAL_STATE, state) {
       toRepeat = operation.slice(-2);
       // let the evaluation begin!
       // console.time('evaluation');
-      let evaluation = evaluateArray(...operation);
+      let evaluation = oooEvaluate(...operation);
       // console.timeEnd('evaluation');
       if (isNaN(evaluation)) {
         // output error message

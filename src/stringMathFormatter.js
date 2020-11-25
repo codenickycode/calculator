@@ -1,4 +1,7 @@
 function toExpression(string) {
+  if (typeof string !== 'string') {
+    string = JSON.stringify(string);
+  }
   string = string
     .replace(/[^0-9eE\.\+\-\*\/]/g, '') // remove anything that isn't arithmetic
     .replace(/\.{2,}/g, '.') // replace multiple decimals with single decimal
