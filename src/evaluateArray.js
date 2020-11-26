@@ -1,53 +1,7 @@
-// Formats input to string with valid order of operations arithmetic.
-// Converts string expression to array [number, operator, number]
-// Returns evaluation or error.
-
 import Decimal from 'decimal.js-light';
 
-function oooEvaluate(input) {
-  let x = null;
-  if (typeof input !== 'string') {
-    x = [...input];
-    x = JSON.stringify(input);
-  } else {
-    x = input;
-  }
-  x = toOOOExpression(x);
-  x = oooExpToArray(x);
-  x = evaluateArray(x);
-  return x;
-}
-
-export function toOOOExpression(string) {
-  string = string
-    .replace(/[^0-9eE\.\+\-\*\/]/g, '') // remove anything that isn't arithmetic
-    .replace(/\.{2,}/g, '.') // replace multiple decimals with single decimal
-    .replace(/^\D*(?=\-\.\d)|^\D*(?=\.\d)|^\D*(?=\-\d)|^\D*(?=\d)|\D+$/, '') // remove invalid leading/trailing characters
-    .replace(/[\+\-\*\/]*(\+\-|\-\-|\*\-|\/\-)/g, '$1') // replace 2+ operators but preserve negative signs
-    .replace(/[\+\-\*\/]+([\+\*\/])/g, '$1') // replace remaining 2+ operators
-    .replace(/((\d\.\d+)(?:\.+\d+)+|\.+(\D))/g, '$2'); // truncate everything after additional decimal
-  return string;
-}
-
-export function oooExpToArray(string) {
-  string = string
-    .replace(/([\+\*\/])/g, '~$1~') // delimit operators with ~
-    .replace(/(\d)\-\-(\.?\d)/g, '$1~-~-$2') // delimit -- (only the operator -)
-    .replace(/([^~])\-/g, '$1~-~') // delimit - (not a negative sign)
-    .split('~'); // array format [number, operator, number, operator, ...]
-  return string;
-}
-
 export function evaluateArray(...array) {
-  const formatError = `
-      evaluateArray.js Error: ${JSON.stringify(array)}
-      Array format must be: [number, operator, number, operator, ... , number]
-      Operators must be one of the following strings: '+' , '-' , '*' , '/' 
-      `;
-  if (array.length % 2 === 0) {
-    console.log(formatError);
-    return 'Error';
-  }
+  if (array.length % 2 === 0) throw new Error('Invalid Format 1');
 
   // each operator's function and first index
   const op = {
@@ -82,8 +36,7 @@ export function evaluateArray(...array) {
       isNaN(array[index]) ||
       isNaN(array[index + 2])
     ) {
-      console.log(formatError);
-      return 'Error';
+      throw new Error('Invalid Format 2');
     }
     const first = Decimal(array[index]);
     const second = Decimal(array[index + 2]);
@@ -126,11 +79,8 @@ export function evaluateArray(...array) {
     }
   }
 
-  if (array.length > 1) {
-    console.log(formatError);
-    return 'Error';
-  }
+  if (array.length > 1) throw new Error('Invalid Format 3');
   return array[0];
 }
 
-export default oooEvaluate;
+export default evaluateArray;
