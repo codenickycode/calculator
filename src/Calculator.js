@@ -1,55 +1,33 @@
 import React from 'react';
-import Redux from 'redux';
-import ReactRedux from 'react-redux';
+import { createStore, combineReducers } from 'redux';
+import { Provider, connect } from 'react-redux';
 import inputReducer from './inputReducer';
+import { actionInput } from './actions';
 import Buttons from './Buttons.js';
 import Display from './Display.js';
 
 console.clear();
 
-// Redux action types
-const INPUT = 'INPUT';
-// OUTPUT = 'OUTPUT';
-
-// Redux actions
-const actionInput = (input) => {
-  return {
-    type: INPUT,
-    input,
-  };
-};
-// const actionOutput = output => {
-//   return {
-//     type: OUTPUT,
-//     output,
-//   }
-// }
-
-const rootReducer = Redux.combineReducers({
-  input: inputReducer,
-  // output: outputReducer,
+const rootReducer = combineReducers({
+  inputReducer,
 });
 
-const store = Redux.createStore(rootReducer);
+export const store = createStore(
+  rootReducer,
+  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+);
 
-const displayState = (displayState) => {
-  return displayState;
-};
-const buttonsState = (buttonsState) => {
-  return buttonsState;
-};
-const buttonsDispatch = (dispatch) => {
-  return {
-    click: (input) => {
-      dispatch(actionInput(input));
-    },
-  };
-};
+const displayProps = (state) => ({
+  operationDisplay: state.inputReducer.operationDisplay,
+  output: state.inputReducer.output,
+});
+const DisplayContainer = connect(displayProps)(Display);
 
-const Provider = ReactRedux.Provider;
-const connect = ReactRedux.connect;
-const DisplayContainer = connect(displayState)(Display);
-const ButtonsContainer = connect(buttonsState, buttonsDispatch)(Buttons);
+const buttonsProps = (state) => ({
+  decimal: state.inputReducer.decimal,
+});
+const buttonsDispatch = { actionInput };
+const ButtonsContainer = connect(buttonsProps, buttonsDispatch)(Buttons);
 
 class Calculator extends React.Component {
   constructor(props) {
@@ -69,12 +47,3 @@ class Calculator extends React.Component {
 }
 
 export default Calculator;
-
-// <Display
-//           start={this.state.start}
-//           newOperand={this.state.newOperand}
-//           operating={this.state.operating}
-//           operationDisplay={this.state.operationDisplay}
-//           output={this.state.output}
-//         />
-//         <Buttons click={this.buttonClick} />
