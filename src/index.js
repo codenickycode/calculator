@@ -1,6 +1,23 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Calculator from './Calculator.js';
+import { createStore, combineReducers } from 'redux';
+import { Provider } from 'react-redux';
+import inputReducer from './redux/reducers/inputReducer';
+import Calculator from './components/Calculator.js';
 import './index.css';
 
-ReactDOM.render(<Calculator />, document.getElementById('calculator'));
+const rootReducer = combineReducers({
+  inputReducer,
+});
+
+export const store = createStore(
+  rootReducer,
+  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+);
+
+ReactDOM.render(
+  <Provider store={store}>
+    <Calculator />
+  </Provider>,
+  document.getElementById('calculator')
+);

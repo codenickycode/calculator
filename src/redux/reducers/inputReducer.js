@@ -1,36 +1,21 @@
 import evaluateArray from './evaluateArray.js';
-
-const INITIAL_STATE = {
-  start: true, // true only on app start and after 'clear'
-  newOperand: true, // if false, numerical input builds on currentOperand
-  decimal: false, // true when adding decimal places to currentOperand
-  decPlace: 0, // current number of decimal places
-  operating: false, // true if prev push was an operator (ex: '+', '-', '*', '/')
-  isNeg: false, // sign of currentOperand will be negative (ex: input: 9+-3, currentOperand: -3)
-  currentOperand: 0, // current operand being built
-  operation: [0], // operation to be evaluated (ex: [number, string, number, string, ...])
-  operationDisplay: [], // operation formatted for <Display />
-  output: '0', // current input or evaluated result
-  toRepeat: [], // previous operation to repeat (ex: ['+',1] ['*', 365])
-};
-const MAX_INPUT_LENGTH = 14;
+import { INITIAL_STATE, MAX_INPUT_LENGTH } from '../constants.js';
 
 const inputReducer = (state = INITIAL_STATE, action) => {
   const input = action.input;
-  const props = { ...state };
-  let { start, newOperand, decimal, decPlace, operating, isNeg } = props;
-  // if we previously converted to string to add decimal places
+  let { start, newOperand, decimal, decPlace, operating, isNeg } = state;
   let currentOperand = parseFloat(state.currentOperand);
-  // make copies of arrays
   let operation = [...state.operation];
   let toRepeat = [...state.toRepeat];
 
   switch (input) {
     // ********* AC / BACKSPACE / DEL ********* //
-    case 'clear':
+    case 'Delete':
+    case 'Escape':
       // re-initialize state
       return INITIAL_STATE;
-
+    // case 'Backspace':
+    //   return ?????
     // ********* ENTER / = ********* //
     case 'Enter':
       if (newOperand) {
@@ -149,7 +134,7 @@ const inputReducer = (state = INITIAL_STATE, action) => {
           decimal: true,
           operating: false,
           currentOperand,
-          operation: operation,
+          operation,
           output: currentOperand + '.',
         };
       } else {

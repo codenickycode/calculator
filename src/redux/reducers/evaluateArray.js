@@ -1,6 +1,6 @@
 import Decimal from 'decimal.js-light';
 
-export function evaluateArray(...array) {
+function evaluateArray(...array) {
   if (array.length % 2 === 0) throw new Error('Invalid Format 1');
 
   // each operator's function and first index
@@ -80,7 +80,14 @@ export function evaluateArray(...array) {
   }
 
   if (array.length > 1) throw new Error('Invalid Format 3');
-  return array[0];
+
+  if (array[0] === Infinity) {
+    return '> MAX VALUE';
+  } else if (array[0] === -Infinity) {
+    return '< MIN VALUE';
+  } else {
+    return array[0];
+  }
 }
 
 export default evaluateArray;

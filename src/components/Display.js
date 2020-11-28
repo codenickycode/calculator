@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 
 class Display extends React.Component {
   constructor(props) {
@@ -9,7 +10,11 @@ class Display extends React.Component {
 
     let { operationDisplay, output } = this.props;
     // chop the leading 0 if it wasn't added explicitly
-    if (operationDisplay.length === 2 && operationDisplay[0] === 0 && !isNaN(operationDisplay[1])) {
+    if (
+      operationDisplay.length === 2 &&
+      operationDisplay[0] === 0 &&
+      !isNaN(operationDisplay[1])
+    ) {
       operationDisplay.shift(0);
     }
     operationDisplay = operationDisplay.toString();
@@ -31,4 +36,8 @@ class Display extends React.Component {
   }
 }
 
-export default Display;
+const displayProps = (state) => ({
+  operationDisplay: state.inputReducer.operationDisplay,
+  output: state.inputReducer.output,
+});
+export const DisplayContainer = connect(displayProps)(Display);
