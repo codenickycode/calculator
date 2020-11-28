@@ -19,7 +19,6 @@ class Display extends React.Component {
     }
     operationDisplay = operationDisplay.toString();
     operationDisplay = operationDisplay.replaceAll(',', ' ');
-
     return (
       <div id='display' className='display'>
         {/* if new expression, display nothing,
@@ -28,9 +27,6 @@ class Display extends React.Component {
           {operationDisplay.length === 0 ? null : operationDisplay}
         </p>
         {/* {output} shows current input or evaluated result */}
-        <p id='display-ev' className='display'>
-          {output}
-        </p>
       </div>
     );
   }

@@ -6,6 +6,7 @@ const inputReducer = (state = INITIAL_STATE, action) => {
   let { start, newOperand, decimal, decPlace, operating, isNeg } = state;
   let currentOperand = parseFloat(state.currentOperand);
   let operation = [...state.operation];
+  let operationDisplay = [...state.operationDisplay];
   let toRepeat = [...state.toRepeat];
 
   switch (input) {
@@ -39,10 +40,11 @@ const inputReducer = (state = INITIAL_STATE, action) => {
       // let the evaluation begin!
       // console.time('evaluation');
       let evaluation = evaluateArray(...operation);
+      console.timeEnd('syEvaluation');
       // console.timeEnd('evaluation');
       if (isNaN(evaluation)) {
         // re-init and output error message
-        return { ...INITIAL_STATE, output: evaluation };
+        return { ...INITIAL_STATE, operationDisplay: evaluation };
       } else {
         // re-initialize,
         // carry over evaluation and toRepeat operation
@@ -50,9 +52,8 @@ const inputReducer = (state = INITIAL_STATE, action) => {
         let newState = {
           start: false,
           operation: [evaluation],
-          operationDisplay: [...operation, '='],
+          operationDisplay: [...operation, '=', evaluation],
           toRepeat: [evaluation, ...toRepeat],
-          output: evaluation,
         };
         return { ...INITIAL_STATE, ...newState };
       }
@@ -110,8 +111,7 @@ const inputReducer = (state = INITIAL_STATE, action) => {
         operating: false,
         currentOperand,
         operation,
-        operationDisplay: [...operation],
-        output: currentOperand,
+        operationDisplay: [...operation, currentOperand],
       };
 
     // ********* DECIMAL ********* //
@@ -135,7 +135,7 @@ const inputReducer = (state = INITIAL_STATE, action) => {
           operating: false,
           currentOperand,
           operation,
-          output: currentOperand + '.',
+          operationDisplay: [...operationDisplay, currentOperand, '.'],
         };
       } else {
         // otherwise, do nothing
@@ -150,13 +150,22 @@ const inputReducer = (state = INITIAL_STATE, action) => {
       // DOUBLE CHECK THIS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
       if (newOperand && input === '-' && operation.length !== 1) {
         // it's a sign change (-)
-        return { ...state, start: false, isNeg: true, output: input };
+        return {
+          ...state,
+          start: false,
+          isNeg: true,
+          operationDisplay: [...operationDisplay, input],
+        };
       }
       // if there's already an operator
       if (operating) {
         if (input === '-') {
           // minus is now a sign change
-          return { ...state, isNeg: true, output: input };
+          return {
+            ...state,
+            isNeg: true,
+            operationDisplay: [...operationDisplay, input],
+          };
         }
         // but the other operators will just take over
         // by removing the previous operator
@@ -186,7 +195,6 @@ const inputReducer = (state = INITIAL_STATE, action) => {
         currentOperand: 0,
         operation: [...operation],
         operationDisplay: [...operation],
-        output: input,
         toRepeat: [],
       };
 
