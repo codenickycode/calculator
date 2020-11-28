@@ -50,7 +50,7 @@ const inputReducer = (state = INITIAL_STATE, action) => {
         let newState = {
           start: false,
           operation: [evaluation],
-          operationDisplay: [...operation, '=', evaluation],
+          operationDisplay: [...operation, '='],
           toRepeat: [evaluation, ...toRepeat],
           output: evaluation,
         };
@@ -109,8 +109,8 @@ const inputReducer = (state = INITIAL_STATE, action) => {
         decPlace,
         operating: false,
         currentOperand,
-        operation: operation,
-        operationDisplay: [...operation, currentOperand],
+        operation,
+        operationDisplay: [...operation],
         output: currentOperand,
       };
 
