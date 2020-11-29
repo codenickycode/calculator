@@ -1,26 +1,25 @@
 import Decimal from 'decimal.js-light';
 
-export function evaluateArray(...array) {
+function evaluateArray(...array) {
   if (array.length % 2 === 0) throw new Error('Invalid Format 1');
 
   // each operator's function and first index
   const op = {
     '/': {
       index: array.indexOf('/'),
-      operation: (first, second) =>
-        second.isZero() ? 'dbz' : first.dividedBy(second),
+      operation: (first, second) => Decimal(first).dividedBy(Decimal(second)),
     },
     '*': {
       index: array.indexOf('*'),
-      operation: (first, second) => first.times(second),
+      operation: (first, second) => Decimal(first).times(Decimal(second)),
     },
     '-': {
       index: array.indexOf('-'),
-      operation: (first, second) => first.minus(second),
+      operation: (first, second) => Decimal(first).minus(Decimal(second)),
     },
     '+': {
       index: array.indexOf('+'),
-      operation: (first, second) => first.plus(second),
+      operation: (first, second) => Decimal(first).plus(Decimal(second)),
     },
   };
 
@@ -38,15 +37,28 @@ export function evaluateArray(...array) {
     ) {
       throw new Error('Invalid Format 2');
     }
-    const first = Decimal(array[index]);
-    const second = Decimal(array[index + 2]);
+    const first = array[index];
+    const second = array[index + 2];
+    if (
+      first === Infinity ||
+      first >= Number.MAX_VALUE ||
+      second === Infinity ||
+      second >= Number.MAX_VALUE
+    ) {
+      return 'MAX VALUE';
+    } else if (first === -Infinity || second === -Infinity) {
+      return 'MIN VALUE';
+    } else if (operator === '/' && second === 0) {
+      return 'DIVIDE BY ZERO';
+    }
     let newNum = op[operator].operation(first, second);
-    if (newNum === 'dbz') return 'DIVIDE BY ZERO';
     newNum = newNum.toNumber();
-    if (newNum >= Number.MAX_VALUE || newNum === Infinity) return 'MAX VALUE';
     // insert operand where we removed operation
     array.splice(index, 3, newNum);
-    op[operator].index = array.indexOf(operator);
+    op['/'].index = array.indexOf('/');
+    op['*'].index = array.indexOf('*');
+    op['-'].index = array.indexOf('-');
+    op['+'].index = array.indexOf('+');
   }
 
   // preserving order of operations,
@@ -80,6 +92,7 @@ export function evaluateArray(...array) {
   }
 
   if (array.length > 1) throw new Error('Invalid Format 3');
+
   return array[0];
 }
 

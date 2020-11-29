@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron&display=swap');
+
 * {
   margin: 0;
   padding: 0;
@@ -5,62 +7,66 @@
 }
 
 :root {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans',
-    'Droid Sans', 'Helvetica Neue', sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  font-family: 'Orbitron', sans-serif;
 }
 
 body {
   height: 100vh;
+  width: 100vw;
   display: flex;
   justify-content: center;
   align-items: center;
   overflow: hidden;
-  background-color: #c2c2d6;
+  background-color: black;
   color: white;
 }
 
+/* <Calculator /> */
 #calculator {
-  margin: 1rem;
-  padding: 0.25rem;
-  width: 350px;
-  height: 400px;
+  width: 100%;
+  height: 100%;
   background-color: black;
   display: flex;
-  flex-direction: column;
-}
-
-#display {
-  padding: 0.25rem;
-  height: 4rem;
-  background-color: black;
   overflow: hidden;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
-#display-op,
-#display-ev {
-  text-align: right;
-  font-family: digital;
-}
+/* display div */
+/* #display {
+  visibility: hidden;
+  max-width: 100%;
+  width: 350px;
+  height: 200px;
+  background-color: black;
+  display: flex;
+  align-items: center;
+  direction: rtl;
+} */
 
-#display-op {
-  justify-self: end;
-  height: 1rem;
-  color: #ff9500;
-  margin-bottom: 0.35rem;
-}
-
-#display-ev {
+/* display p */
+/* #output {
+  direction: ltr;
+  font-family: inherit;
   color: white;
-  font-size: 2rem;
+  font-size: 3rem;
   line-height: 2rem;
-}
+  white-space: nowrap;
+} */
 
+/* <Buttons /> */
 #grid {
-  flex: 1;
+  width: 98%;
+  height: auto;
+  max-width: 550px;
+  min-width: 250px;
   display: grid;
-  grid-gap: 1px;
+  justify-content: center;
+  align-items: center;
+  grid-gap: 3px;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  /* grid-template-rows: 1fr 1fr 1fr 1fr 1fr; */
   grid-template-areas:
     ' clear   clear   divide   mult'
     ' seven   eight    nine    min'
@@ -69,24 +75,29 @@ body {
     ' zero    zero     dec     eq';
 }
 
+/* button div */
 .btn {
-  color: white;
-  font-size: 1rem;
-  outline: none;
+  width: 100%;
+  min-width: 0;
+  height: auto;
 }
 
-.op {
-  background-color: #666666;
+/* button svg element */
+.svg-button {
 }
 
-.num {
-  background-color: #4d4d4d;
+/* button svg border path */
+.svg-border {
+}
+
+/* button svg inner text path */
+.svg-label {
 }
 
 #clear {
   grid-area: clear;
-  background-color: #ac3939;
 }
+
 #divide {
   grid-area: divide;
 }
@@ -134,5 +145,4 @@ body {
 }
 #eq {
   grid-area: eq;
-  background-color: #014466;
 }

@@ -1,33 +1,22 @@
 import evaluateArray from './evaluateArray.js';
+import { INITIAL_STATE, MAX_INPUT_LENGTH } from '../constants.js';
 
-function calculateInput(input, INITIAL_STATE, state) {
-  const init = INITIAL_STATE();
-  const MAX_INPUT_LENGTH = 14;
-  // get all the current values from state
-  let props = { ...state };
-  let {
-    start,
-    newOperand,
-    decimal,
-    decPlace,
-    operating,
-    operation,
-    isNeg,
-    currentOperand,
-    toRepeat,
-  } = props;
-
-  // if we previously converted to a string to
-  // add decimal place zeros for display,
-  // convert it back to a number
-  currentOperand = parseFloat(currentOperand);
+const inputReducer = (state = INITIAL_STATE, action) => {
+  const input = action.input;
+  let { start, newOperand, decimal, decPlace, operating, isNeg } = state;
+  let currentOperand = parseFloat(state.currentOperand);
+  let operation = [...state.operation];
+  let output = [...state.output];
+  let toRepeat = [...state.toRepeat];
 
   switch (input) {
     // ********* AC / BACKSPACE / DEL ********* //
-    case 'clear':
+    case 'Delete':
+    case 'Escape':
       // re-initialize state
-      return init;
-
+      return INITIAL_STATE;
+    // case 'Backspace':
+    //   return ?????
     // ********* ENTER / = ********* //
     case 'Enter':
       if (newOperand) {
@@ -37,7 +26,7 @@ function calculateInput(input, INITIAL_STATE, state) {
           operation = [...toRepeat];
         } else {
           // otherwise, do nothing
-          break;
+          return state;
         }
       } else if (operating) {
         // drop extra operator at end of operation
@@ -51,11 +40,11 @@ function calculateInput(input, INITIAL_STATE, state) {
       // let the evaluation begin!
       // console.time('evaluation');
       let evaluation = evaluateArray(...operation);
+      console.timeEnd('syEvaluation');
       // console.timeEnd('evaluation');
       if (isNaN(evaluation)) {
-        // output error message
-        let newState = { output: evaluation };
-        return { ...init, ...newState };
+        // re-init and output error message
+        return { ...INITIAL_STATE, output: evaluation };
       } else {
         // re-initialize,
         // carry over evaluation and toRepeat operation
@@ -63,11 +52,10 @@ function calculateInput(input, INITIAL_STATE, state) {
         let newState = {
           start: false,
           operation: [evaluation],
-          operationDisplay: [...operation, '=', evaluation],
-          output: evaluation,
+          output: [evaluation],
           toRepeat: [evaluation, ...toRepeat],
         };
-        return { ...init, ...newState };
+        return { ...INITIAL_STATE, ...newState };
       }
 
     // ********* NUMBERS ********* //
@@ -85,7 +73,7 @@ function calculateInput(input, INITIAL_STATE, state) {
         currentOperand.toString().length >= MAX_INPUT_LENGTH ||
         decPlace >= MAX_INPUT_LENGTH
       ) {
-        break;
+        return state;
       }
       if (newOperand) {
         // clear carried over operation
@@ -112,25 +100,24 @@ function calculateInput(input, INITIAL_STATE, state) {
       // add input in 1s place
       currentOperand += inputInt;
       if (decimal) {
-        // add 0s
         currentOperand = currentOperand.toFixed(decPlace);
       }
       // continue creating the currentOperand
       return {
+        ...state,
         start: false,
         newOperand: false,
-        decPlace: decPlace,
+        decPlace,
         operating: false,
-        currentOperand: currentOperand,
-        operation: operation,
-        operationDisplay: [...operation, currentOperand],
-        output: currentOperand,
+        currentOperand,
+        operation,
+        output: [...operation, currentOperand],
       };
 
     // ********* DECIMAL ********* //
     case '.':
       if (currentOperand.toString().length > MAX_INPUT_LENGTH) {
-        break;
+        return state;
       }
       if (newOperand) {
         // clear carried over operation
@@ -139,19 +126,27 @@ function calculateInput(input, INITIAL_STATE, state) {
         operation = [];
       }
       if (!decimal) {
+        let decFix;
+        if (currentOperand === 0) {
+          decFix = '0.';
+        } else {
+          decFix = output.pop();
+          decFix += '.';
+        }
         // operand will now add decimal places
         return {
-          start: start,
-          newOperand: newOperand,
+          ...state,
+          start,
+          newOperand,
           decimal: true,
           operating: false,
-          currentOperand: currentOperand,
-          operation: operation,
-          output: currentOperand + '.',
+          currentOperand,
+          operation,
+          output: [...output, decFix],
         };
       } else {
         // otherwise, do nothing
-        break;
+        return state;
       }
 
     // ********* OPERATORS ********* //
@@ -162,13 +157,22 @@ function calculateInput(input, INITIAL_STATE, state) {
       // DOUBLE CHECK THIS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
       if (newOperand && input === '-' && operation.length !== 1) {
         // it's a sign change (-)
-        return { start: false, isNeg: true, output: input };
+        return {
+          ...state,
+          start: false,
+          isNeg: true,
+          output: [...output, input],
+        };
       }
       // if there's already an operator
       if (operating) {
         if (input === '-') {
           // minus is now a sign change
-          return { isNeg: true, output: input };
+          return {
+            ...state,
+            isNeg: true,
+            output: [...output, input],
+          };
         }
         // but the other operators will just take over
         // by removing the previous operator
@@ -197,15 +201,14 @@ function calculateInput(input, INITIAL_STATE, state) {
         isNeg: false,
         currentOperand: 0,
         operation: [...operation],
-        operationDisplay: [...operation],
-        output: input,
+        output: [...operation],
         toRepeat: [],
       };
 
-    // this should never happen
+    // only on initialization
     default:
-      console.log('default');
+      return state;
   }
-}
+};
 
-export default calculateInput;
+export default inputReducer;
