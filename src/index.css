@@ -4,7 +4,6 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  /* border: 1px solid magenta; */
 }
 
 :root {
@@ -22,17 +21,21 @@ body {
   color: white;
 }
 
+/* <Calculator /> */
 #calculator {
   width: 100%;
-  height: 568px;
+  height: 100%;
   background-color: black;
   display: flex;
   overflow: hidden;
   flex-direction: column;
+  justify-content: center;
   align-items: center;
 }
 
-#display {
+/* display div */
+/* #display {
+  visibility: hidden;
   max-width: 100%;
   width: 350px;
   height: 200px;
@@ -40,23 +43,30 @@ body {
   display: flex;
   align-items: center;
   direction: rtl;
-}
+} */
 
-#display-op {
+/* display p */
+/* #output {
   direction: ltr;
   font-family: inherit;
   color: white;
   font-size: 3rem;
   line-height: 2rem;
   white-space: nowrap;
-}
+} */
 
+/* <Buttons /> */
 #grid {
-  width: 100%;
-  max-width: 350px;
-  flex: 1;
+  width: 98%;
+  height: auto;
+  max-width: 550px;
+  min-width: 250px;
   display: grid;
-  grid-gap: 1px;
+  justify-content: center;
+  align-items: center;
+  grid-gap: 3px;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  /* grid-template-rows: 1fr 1fr 1fr 1fr 1fr; */
   grid-template-areas:
     ' clear   clear   divide   mult'
     ' seven   eight    nine    min'
@@ -65,29 +75,29 @@ body {
     ' zero    zero     dec     eq';
 }
 
+/* button div */
 .btn {
-  color: #ff5e5e;
-  font-family: inherit;
-  font-size: 1rem;
-  outline: none;
-  cursor: pointer;
-  border: 2px solid rgba(255, 255, 255, 0.5);
-  border-radius: 5px;
-  background-color: transparent;
+  width: 100%;
+  min-width: 0;
+  height: auto;
 }
 
-.op {
-  /* background-color: #666666; */
+/* button svg element */
+.svg-button {
 }
 
-.num {
-  /* background-color: #4d4d4d; */
+/* button svg border path */
+.svg-border {
+}
+
+/* button svg inner text path */
+.svg-label {
 }
 
 #clear {
   grid-area: clear;
-  /* background-color: #ac3939; */
 }
+
 #divide {
   grid-area: divide;
 }
@@ -135,5 +145,4 @@ body {
 }
 #eq {
   grid-area: eq;
-  /* background-color: #014466; */
 }

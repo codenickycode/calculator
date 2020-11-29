@@ -6,7 +6,7 @@ const inputReducer = (state = INITIAL_STATE, action) => {
   let { start, newOperand, decimal, decPlace, operating, isNeg } = state;
   let currentOperand = parseFloat(state.currentOperand);
   let operation = [...state.operation];
-  let operationDisplay = [...state.operationDisplay];
+  let output = [...state.output];
   let toRepeat = [...state.toRepeat];
 
   switch (input) {
@@ -44,7 +44,7 @@ const inputReducer = (state = INITIAL_STATE, action) => {
       // console.timeEnd('evaluation');
       if (isNaN(evaluation)) {
         // re-init and output error message
-        return { ...INITIAL_STATE, operationDisplay: evaluation };
+        return { ...INITIAL_STATE, output: evaluation };
       } else {
         // re-initialize,
         // carry over evaluation and toRepeat operation
@@ -52,7 +52,7 @@ const inputReducer = (state = INITIAL_STATE, action) => {
         let newState = {
           start: false,
           operation: [evaluation],
-          operationDisplay: [...operation, '=', evaluation],
+          output: [evaluation],
           toRepeat: [evaluation, ...toRepeat],
         };
         return { ...INITIAL_STATE, ...newState };
@@ -111,7 +111,7 @@ const inputReducer = (state = INITIAL_STATE, action) => {
         operating: false,
         currentOperand,
         operation,
-        operationDisplay: [...operation, currentOperand],
+        output: [...operation, currentOperand],
       };
 
     // ********* DECIMAL ********* //
@@ -126,6 +126,13 @@ const inputReducer = (state = INITIAL_STATE, action) => {
         operation = [];
       }
       if (!decimal) {
+        let decFix;
+        if (currentOperand === 0) {
+          decFix = '0.';
+        } else {
+          decFix = output.pop();
+          decFix += '.';
+        }
         // operand will now add decimal places
         return {
           ...state,
@@ -135,7 +142,7 @@ const inputReducer = (state = INITIAL_STATE, action) => {
           operating: false,
           currentOperand,
           operation,
-          operationDisplay: [...operationDisplay, currentOperand, '.'],
+          output: [...output, decFix],
         };
       } else {
         // otherwise, do nothing
@@ -154,7 +161,7 @@ const inputReducer = (state = INITIAL_STATE, action) => {
           ...state,
           start: false,
           isNeg: true,
-          operationDisplay: [...operationDisplay, input],
+          output: [...output, input],
         };
       }
       // if there's already an operator
@@ -164,7 +171,7 @@ const inputReducer = (state = INITIAL_STATE, action) => {
           return {
             ...state,
             isNeg: true,
-            operationDisplay: [...operationDisplay, input],
+            output: [...output, input],
           };
         }
         // but the other operators will just take over
@@ -194,7 +201,7 @@ const inputReducer = (state = INITIAL_STATE, action) => {
         isNeg: false,
         currentOperand: 0,
         operation: [...operation],
-        operationDisplay: [...operation],
+        output: [...operation],
         toRepeat: [],
       };
 

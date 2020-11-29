@@ -1,5 +1,5 @@
 import React from 'react';
-import { buttonsArray } from './buttonsArray.js';
+import { buttonProps } from './buttonProps.js';
 import { connect } from 'react-redux';
 import { actionInput } from '../redux/actions.js';
 
@@ -11,13 +11,13 @@ class Button extends React.Component {
   render() {
     console.log(`rendering <Button ${this.props.id}/>`);
     return (
-      <button
+      <div
         id={this.props.id}
         className={this.props.class}
         onClick={() => this.props.actionInput()}
       >
-        {this.props.label}
-      </button>
+        {this.props.svg}
+      </div>
     );
   }
 }
@@ -39,13 +39,14 @@ class Buttons extends React.Component {
 
   render() {
     console.log('rendering <buttons/>');
-    const buttons = buttonsArray.map((b) => (
+    const buttons = buttonProps.map((b) => (
       <ButtonContainer
         key={b.id}
         id={b.id}
         class={b.class}
         input={b.input}
         label={b.label}
+        svg={b.svg}
       />
     ));
     return <div id='grid'>{buttons}</div>;

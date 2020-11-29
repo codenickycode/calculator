@@ -8,32 +8,26 @@ class Display extends React.Component {
   render() {
     // console.log('rendering <Display/>');
 
-    let { operationDisplay, output } = this.props;
+    let { output } = this.props;
     // chop the leading 0 if it wasn't added explicitly
-    if (
-      operationDisplay.length === 2 &&
-      operationDisplay[0] === 0 &&
-      !isNaN(operationDisplay[1])
-    ) {
-      operationDisplay.shift(0);
+    if (output.length === 2 && output[0] === 0 && !isNaN(output[1])) {
+      output.shift(0);
     }
-    operationDisplay = operationDisplay.toString();
-    operationDisplay = operationDisplay.replaceAll(',', ' ');
+    output = output.toString();
+    output = output.replaceAll(',', ' ');
     return (
       <div id='display' className='display'>
         {/* if new expression, display nothing,
-          else display operation */}
-        <p id='display-op' className='display'>
-          {operationDisplay.length === 0 ? null : operationDisplay}
+          else display operation or evaluation */}
+        <p id='output' className='display'>
+          {output.length === 0 ? null : output}
         </p>
-        {/* {output} shows current input or evaluated result */}
       </div>
     );
   }
 }
 
 const displayProps = (state) => ({
-  operationDisplay: state.inputReducer.operationDisplay,
   output: state.inputReducer.output,
 });
 export const DisplayContainer = connect(displayProps)(Display);
