@@ -1,5 +1,4 @@
 export const INITIAL_STATE = {
-  start: true, // true only on app start and after 'clear'
   newOperand: true, // if false, numerical input builds on currentOperand
   decimal: false, // true when adding decimal places to currentOperand
   decPlace: 0, // current number of decimal places
@@ -10,6 +9,7 @@ export const INITIAL_STATE = {
   operationDisplay: [], // operation formatted for <OperationDisplay />
   output: 0, // current input or evaluation for <Output />
   toRepeat: [], // previous operation to repeat (ex: ['+',1] ['*', 365])
+  prevOutput: '0', // previous output
 };
 
 export const MAX_INPUT_LENGTH = 9;

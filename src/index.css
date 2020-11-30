@@ -39,6 +39,7 @@ body {
 #output-div,
 #operation-div {
   margin: 1rem;
+  padding-right: 0.5rem;
   width: 100%;
   /* border: 1px solid red; */
 }
@@ -60,6 +61,7 @@ body {
 #output-p {
   direction: ltr;
   white-space: nowrap;
+  font-size: 6vw;
 }
 
 #operation-div {

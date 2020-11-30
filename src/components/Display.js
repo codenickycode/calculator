@@ -6,10 +6,10 @@ class Output extends React.Component {
   constructor(props) {
     super(props);
   }
+
   render() {
     // console.log('rendering <Display/>');
     let { output } = this.props;
-
     if (typeof output !== 'string') {
       output = Decimal(
         Decimal(output).toPrecision(9, Decimal.ROUND_HALF_UP)
@@ -20,19 +20,12 @@ class Output extends React.Component {
       output = output.toString();
     }
     // font size
-    let width = window.innerWidth;
     let size = 6;
-    // small screen media query
-    if (width <= 768) {
-      size = 18 - output.length * 0.7;
-      if (output.length < 7) {
-        size = 18;
-      }
-      if (size < 6) {
-        size = 6;
-      }
+    if (output.length > 5) {
+      size = 6 - output.length * 0.25;
     }
-    let sizeRem = size + 'vw';
+
+    let sizeRem = size + 'rem';
     let fontSize = { fontSize: sizeRem };
     return (
       <div id='output-div' className='display'>
