@@ -2,10 +2,15 @@ import React from 'react';
 import { buttonProps } from './buttonProps.js';
 import { connect } from 'react-redux';
 import { actionInput } from '../redux/actions.js';
+import { store } from '../index.js';
 
 class Button extends React.Component {
   constructor(props) {
     super(props);
+    this.handleClick = this.handleClick.bind(this);
+  }
+  handleClick() {
+    store.dispatch(actionInput(this.props.input));
   }
 
   render() {
@@ -14,7 +19,7 @@ class Button extends React.Component {
       <div
         id={this.props.id}
         className={this.props.class}
-        onClick={() => this.props.actionInput()}
+        onClick={this.handleClick}
       >
         {this.props.svg}
       </div>
@@ -25,12 +30,12 @@ class Button extends React.Component {
 const buttonState = (state) => ({
   decimal: state.inputReducer.decimal,
 });
-const buttonDispatch = (dispatch, ownProps) => {
-  return {
-    actionInput: () => dispatch(actionInput(ownProps.input)),
-  };
-};
-const ButtonContainer = connect(buttonState, buttonDispatch)(Button);
+// const buttonDispatch = (dispatch, ownProps) => {
+//   return {
+//     actionInput: () => dispatch(actionInput(ownProps.input)),
+//   };
+// };
+const ButtonContainer = connect(buttonState)(Button);
 
 class Buttons extends React.Component {
   constructor(props) {
