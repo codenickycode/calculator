@@ -1,12 +1,17 @@
 import React from 'react';
-import { store } from '../index.js';
-import { actionInput } from '../redux/actions';
+import inputReducer from '../redux/reducers/inputReducer.js';
 import Buttons from './Buttons.js';
-import { OutputContainer, OperationContainer } from './Display.js';
+import { Output, Operation } from './Display.js';
 
 class Calculator extends React.Component {
   constructor(props) {
     super(props);
+    this.state = this.INITIAL_STATE();
+    this.buttonPress = this.buttonPress.bind(this);
+    this.handleKeydown = this.handleKeydown.bind(this);
+  }
+  buttonPress(input) {
+    this.setState(inputReducer(input, this.state, this.INITIAL_STATE));
   }
   componentDidMount() {
     document.addEventListener('keydown', this.handleKeydown);
@@ -15,17 +20,30 @@ class Calculator extends React.Component {
     document.removeEventListener('keydown', this.handleKeydown);
   }
   handleKeydown(e) {
-    store.dispatch(actionInput(e.key));
+    this.buttonPress(e.key);
   }
+  INITIAL_STATE = () => ({
+    newOperand: true, // if false, numerical input builds on currentOperand
+    decimal: false, // true when adding decimal places to currentOperand
+    decPlace: 0, // current number of decimal places
+    operating: false, // true if prev push was an operator (ex: '+', '-', '*', '/')
+    isNeg: false, // sign of currentOperand will be negative (ex: input: 9+-3, currentOperand: -3)
+    currentOperand: 0, // current operand being built
+    operation: [0], // operation to be evaluated (ex: [number, string, number, string, ...])
+    operationDisplay: [], // operation formatted for <OperationDisplay />
+    output: 0, // current input or evaluation for <Output />
+    toRepeat: [], // previous operation to repeat (ex: ['+',1] ['*', 365])
+    prevOutput: '0', // previous output
+  });
 
   render() {
     console.log('rendering <Calculator/>');
 
     return (
       <>
-        <OutputContainer />
-        <Buttons />
-        <OperationContainer />
+        <Output output={this.state.output} />
+        <Buttons click={this.buttonPress} />
+        <Operation operationDisplay={this.state.operationDisplay} />
       </>
     );
   }

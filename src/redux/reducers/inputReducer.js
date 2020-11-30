@@ -1,9 +1,8 @@
 import evaluateArray from './evaluateArray.js';
-import { INITIAL_STATE, MAX_INPUT_LENGTH } from '../constants.js';
+export const MAX_INPUT_LENGTH = 9;
 
-const inputReducer = (state = INITIAL_STATE, action) => {
-  const input = action.input;
-  let { start, newOperand, decimal, decPlace, operating, isNeg } = state;
+function inputReducer(input, state, INITIAL_STATE) {
+  let { newOperand, decimal, decPlace, operating, isNeg } = state;
   let currentOperand = parseFloat(state.currentOperand);
   let operation = [...state.operation];
   let operationDisplay = [...state.operationDisplay];
@@ -14,7 +13,7 @@ const inputReducer = (state = INITIAL_STATE, action) => {
     case 'Delete':
     case 'Escape':
       // re-initialize state
-      return INITIAL_STATE;
+      return INITIAL_STATE();
     // case 'Backspace':
     //   return ?????
     // ********* ENTER / = ********* //
@@ -26,7 +25,7 @@ const inputReducer = (state = INITIAL_STATE, action) => {
           operation = [...toRepeat];
         } else {
           // otherwise, do nothing
-          return state;
+          return;
         }
       } else if (operating) {
         // drop extra operator at end of operation
@@ -41,18 +40,17 @@ const inputReducer = (state = INITIAL_STATE, action) => {
       let evaluation = evaluateArray(...operation);
       if (isNaN(evaluation)) {
         // re-init and output error message
-        return { ...INITIAL_STATE, output: evaluation };
+        return { ...INITIAL_STATE(), output: evaluation };
       } else {
         // re-initialize,
         // carry over evaluation and toRepeat operation
         // display the evaluation as output
         let newState = {
-          start: false,
           operation: [evaluation],
           output: evaluation,
           toRepeat: [evaluation, ...toRepeat],
         };
-        return { ...INITIAL_STATE, ...newState };
+        return { ...INITIAL_STATE(), ...newState };
       }
 
     // ********* NUMBERS ********* //
@@ -70,11 +68,10 @@ const inputReducer = (state = INITIAL_STATE, action) => {
         currentOperand.toString().length >= MAX_INPUT_LENGTH ||
         decPlace >= MAX_INPUT_LENGTH
       ) {
-        return state;
+        return;
       }
       if (newOperand) {
         // clear carried over operation
-        start = false;
         newOperand = false;
         operation = [];
       }
@@ -101,8 +98,6 @@ const inputReducer = (state = INITIAL_STATE, action) => {
       }
       // continue creating the currentOperand
       return {
-        ...state,
-        start: false,
         newOperand: false,
         decPlace,
         operating: false,
@@ -115,11 +110,10 @@ const inputReducer = (state = INITIAL_STATE, action) => {
     // ********* DECIMAL ********* //
     case '.':
       if (currentOperand.toString().length > MAX_INPUT_LENGTH) {
-        return state;
+        return;
       }
       if (newOperand) {
         // clear carried over operation
-        start = false;
         newOperand = false;
         operation = [];
       }
@@ -133,8 +127,6 @@ const inputReducer = (state = INITIAL_STATE, action) => {
         }
         // operand will now add decimal places
         return {
-          ...state,
-          start,
           newOperand,
           decimal: true,
           operating: false,
@@ -145,7 +137,7 @@ const inputReducer = (state = INITIAL_STATE, action) => {
         };
       } else {
         // otherwise, do nothing
-        return state;
+        return;
       }
 
     // ********* OPERATORS ********* //
@@ -157,8 +149,6 @@ const inputReducer = (state = INITIAL_STATE, action) => {
       if (newOperand && input === '-' && operation.length !== 1) {
         // it's a sign change (-)
         return {
-          ...state,
-          start: false,
           isNeg: true,
           operationDisplay: [...operationDisplay, input],
           output: input,
@@ -169,7 +159,6 @@ const inputReducer = (state = INITIAL_STATE, action) => {
         if (input === '-') {
           // minus is now a sign change
           return {
-            ...state,
             isNeg: true,
             operationDisplay: [...operationDisplay, input],
             output: input,
@@ -194,7 +183,6 @@ const inputReducer = (state = INITIAL_STATE, action) => {
       }
       // now we're 'operating'
       return {
-        start: false,
         newOperand: newOperand,
         decimal: false,
         decPlace: 0,
@@ -207,10 +195,10 @@ const inputReducer = (state = INITIAL_STATE, action) => {
         output: input,
       };
 
-    // only on initialization
+    // this shouldn't happen
     default:
-      return state;
+      return;
   }
-};
+}
 
 export default inputReducer;

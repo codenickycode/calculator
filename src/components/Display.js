@@ -1,8 +1,7 @@
 import Decimal from 'decimal.js';
 import React from 'react';
-import { connect } from 'react-redux';
 
-class Output extends React.Component {
+export class Output extends React.Component {
   constructor(props) {
     super(props);
   }
@@ -37,12 +36,7 @@ class Output extends React.Component {
   }
 }
 
-const outputProps = (state) => ({
-  output: state.inputReducer.output,
-});
-export const OutputContainer = connect(outputProps)(Output);
-
-class Operation extends React.Component {
+export class Operation extends React.Component {
   constructor(props) {
     super(props);
   }
@@ -68,8 +62,3 @@ class Operation extends React.Component {
     );
   }
 }
-
-const operationProps = (state) => ({
-  operationDisplay: state.inputReducer.operationDisplay,
-});
-export const OperationContainer = connect(operationProps)(Operation);

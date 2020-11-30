@@ -1,25 +1,19 @@
 import React from 'react';
 import { buttonProps } from './buttonProps.js';
-import { connect } from 'react-redux';
-import { actionInput } from '../redux/actions.js';
-import { store } from '../index.js';
 
-class Button extends React.Component {
+class Button extends React.PureComponent {
   constructor(props) {
     super(props);
-    this.handleClick = this.handleClick.bind(this);
-  }
-  handleClick() {
-    store.dispatch(actionInput(this.props.input));
   }
 
   render() {
-    // console.log(`rendering <Button ${this.props.id}/>`);
+    console.log(`rendering <Button ${this.props.id}/>`);
     return (
       <div
         id={this.props.id}
         className={this.props.class}
-        onClick={this.handleClick}
+        onClick={() => this.props.click(this.props.input)}
+        onTouchStart={() => this.props.click(this.props.input)}
       >
         {this.props.svg}
       </div>
@@ -27,29 +21,20 @@ class Button extends React.Component {
   }
 }
 
-const buttonState = (state) => ({
-  decimal: state.inputReducer.decimal,
-});
-// const buttonDispatch = (dispatch, ownProps) => {
-//   return {
-//     actionInput: () => dispatch(actionInput(ownProps.input)),
-//   };
-// };
-const ButtonContainer = connect(buttonState)(Button);
-
-class Buttons extends React.Component {
+class Buttons extends React.PureComponent {
   constructor(props) {
     super(props);
   }
 
   render() {
-    // console.log('rendering <buttons/>');
+    console.log('rendering <buttons/>');
     const buttons = buttonProps.map((b) => (
-      <ButtonContainer
+      <Button
         key={b.id}
         id={b.id}
         class={b.class}
         input={b.input}
+        click={this.props.click}
         label={b.label}
         svg={b.svg}
       />
