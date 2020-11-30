@@ -6,22 +6,26 @@ function evaluateArray(...array) {
   // each operator's function and first index
   const op = {
     '/': {
-      index: array.indexOf('/'),
       operation: (first, second) => Decimal(first).dividedBy(Decimal(second)),
     },
     '*': {
-      index: array.indexOf('*'),
       operation: (first, second) => Decimal(first).times(Decimal(second)),
     },
     '-': {
-      index: array.indexOf('-'),
       operation: (first, second) => Decimal(first).minus(Decimal(second)),
     },
     '+': {
-      index: array.indexOf('+'),
       operation: (first, second) => Decimal(first).plus(Decimal(second)),
     },
   };
+
+  function getIndexes() {
+    for (let i in op) {
+      op[i].index = array.indexOf(i);
+      if (op[i].index === -1) delete op[i];
+    }
+  }
+  getIndexes();
 
   // Removes operation from array, replaces it with evaluation,
   // returns new index of current operator or error.
@@ -55,20 +59,14 @@ function evaluateArray(...array) {
     newNum = newNum.toNumber();
     // insert operand where we removed operation
     array.splice(index, 3, newNum);
-    op['/'].index = array.indexOf('/');
-    op['*'].index = array.indexOf('*');
-    op['-'].index = array.indexOf('-');
-    op['+'].index = array.indexOf('+');
+    getIndexes();
   }
 
   // preserving order of operations,
   // first handle division and multiplication
-  while (op['/'].index !== -1 || op['*'].index !== -1) {
+  while (op['/'] || op['*']) {
     // preserve left to right
-    if (
-      (op['/'].index < op['*'].index && op['/'].index !== -1) ||
-      op['*'].index === -1
-    ) {
+    if (!op['*'] || (op['/'] && op['/'].index < op['*'].index)) {
       let error = evaluate('/');
       if (error) return error;
     } else {
@@ -77,12 +75,9 @@ function evaluateArray(...array) {
     }
   }
   // now handle addition and subtraction
-  while (op['+'].index !== -1 || op['-'].index !== -1) {
+  while (op['+'] || op['-']) {
     // preserve left to right
-    if (
-      (op['+'].index < op['-'].index && op['+'].index !== -1) ||
-      op['-'].index === -1
-    ) {
+    if (!op['-'] || (op['+'] && op['+'].index < op['-'].index)) {
       let error = evaluate('+');
       if (error) return error;
     } else {
