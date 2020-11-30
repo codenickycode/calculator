@@ -7,7 +7,7 @@ class Button extends React.PureComponent {
   }
 
   render() {
-    console.log(`rendering <Button ${this.props.id}/>`);
+    // console.log(`rendering <Button ${this.props.id}/>`);
     return (
       <div
         id={this.props.id}
@@ -27,7 +27,7 @@ class Buttons extends React.PureComponent {
   }
 
   render() {
-    console.log('rendering <buttons/>');
+    // console.log('rendering <buttons/>');
     const buttons = buttonProps.map((b) => (
       <Button
         key={b.id}

@@ -1,5 +1,6 @@
 import React from 'react';
-import inputReducer from '../redux/reducers/inputReducer.js';
+import debounce from './debounce.js';
+import inputReducer from '../inputReducer/inputReducer.js';
 import Buttons from './Buttons.js';
 import { Output, Operation } from './Display.js';
 
@@ -9,14 +10,24 @@ class Calculator extends React.Component {
     this.state = this.INITIAL_STATE();
     this.buttonPress = this.buttonPress.bind(this);
     this.handleKeydown = this.handleKeydown.bind(this);
+    this.vhSize = this.vhSize.bind(this);
+  }
+  vhSize() {
+    debounce(() => {
+      let vh = window.innerHeight * 0.01;
+      console.log(vh);
+      document.documentElement.style.setProperty('--vh', `${vh}px`);
+    }, 150);
   }
   buttonPress(input) {
     this.setState(inputReducer(input, this.state, this.INITIAL_STATE));
   }
   componentDidMount() {
+    window.addEventListener('resize', this.vhSize);
     document.addEventListener('keydown', this.handleKeydown);
   }
   componentWillUnmount() {
+    window.removeEventListener('resize', this.vhSize);
     document.removeEventListener('keydown', this.handleKeydown);
   }
   handleKeydown(e) {
@@ -38,7 +49,6 @@ class Calculator extends React.Component {
 
   render() {
     console.log('rendering <Calculator/>');
-
     return (
       <>
         <Output output={this.state.output} />
