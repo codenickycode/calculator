@@ -2,44 +2,30 @@ import Decimal from 'decimal.js';
 import React from 'react';
 import { connect } from 'react-redux';
 
-class Display extends React.Component {
+class Output extends React.Component {
   constructor(props) {
     super(props);
   }
   render() {
     // console.log('rendering <Display/>');
-    let { output, result } = this.props;
-    // chop the leading 0 if it wasn't added explicitly
-    if (output.length === 2 && output[0] === 0 && !isNaN(output[1])) {
-      output.shift(0);
-    }
-    output = output.toString();
-    output = output.replaceAll(',', ' ');
-    let display = output;
-    let divId = 'display-op';
-    let pId = 'output-op';
-    if (result) {
-      if (typeof result !== 'string') {
-        result = Decimal(
-          Decimal(result).toPrecision(9, Decimal.ROUND_HALF_UP)
-        ).toDecimalPlaces(9, Decimal.ROUND_HALF_UP);
-        if (result > 999999999) {
-          result = result.toExponential(3);
-        }
-        console.log(typeof result);
-      }
+    let { output } = this.props;
 
-      display = result.toString();
-      divId = 'display-eval';
-      pId = 'output-eval';
+    if (typeof output !== 'string') {
+      output = Decimal(
+        Decimal(output).toPrecision(9, Decimal.ROUND_HALF_UP)
+      ).toDecimalPlaces(9, Decimal.ROUND_HALF_UP);
+      if (output > 999999999) {
+        output = output.toExponential(3);
+      }
+      output = output.toString();
     }
     // font size
     let width = window.innerWidth;
     let size = 6;
     // small screen media query
     if (width <= 768) {
-      size = 18 - display.length * 0.7;
-      if (display.length < 7) {
+      size = 18 - output.length * 0.7;
+      if (output.length < 7) {
         size = 18;
       }
       if (size < 6) {
@@ -49,17 +35,48 @@ class Display extends React.Component {
     let sizeRem = size + 'vw';
     let fontSize = { fontSize: sizeRem };
     return (
-      <div id={divId} className='display'>
-        <p id={pId} className='display' style={fontSize}>
-          {display}
+      <div id='output-div' className='display'>
+        <p id='output-p' className='display' style={fontSize}>
+          {output}
         </p>
       </div>
     );
   }
 }
 
-const displayProps = (state) => ({
+const outputProps = (state) => ({
   output: state.inputReducer.output,
-  result: state.inputReducer.result,
 });
-export const DisplayContainer = connect(displayProps)(Display);
+export const OutputContainer = connect(outputProps)(Output);
+
+class Operation extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+  render() {
+    let { operationDisplay } = this.props;
+    // chop the leading 0 if it wasn't added explicitly
+    if (
+      operationDisplay.length === 2 &&
+      operationDisplay[0] === 0 &&
+      !isNaN(operationDisplay[1])
+    ) {
+      operationDisplay.shift(0);
+    }
+    operationDisplay = operationDisplay.toString();
+    operationDisplay = operationDisplay.replaceAll(',', ' ');
+
+    return (
+      <div id='operation-div' className='display'>
+        <p id='operation-p' className='display'>
+          {operationDisplay}
+        </p>
+      </div>
+    );
+  }
+}
+
+const operationProps = (state) => ({
+  operationDisplay: state.inputReducer.operationDisplay,
+});
+export const OperationContainer = connect(operationProps)(Operation);

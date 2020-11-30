@@ -6,7 +6,7 @@ const inputReducer = (state = INITIAL_STATE, action) => {
   let { start, newOperand, decimal, decPlace, operating, isNeg } = state;
   let currentOperand = parseFloat(state.currentOperand);
   let operation = [...state.operation];
-  let output = [...state.output];
+  let operationDisplay = [...state.operationDisplay];
   let toRepeat = [...state.toRepeat];
 
   switch (input) {
@@ -41,7 +41,7 @@ const inputReducer = (state = INITIAL_STATE, action) => {
       let evaluation = evaluateArray(...operation);
       if (isNaN(evaluation)) {
         // re-init and output error message
-        return { ...INITIAL_STATE, result: evaluation };
+        return { ...INITIAL_STATE, output: evaluation };
       } else {
         // re-initialize,
         // carry over evaluation and toRepeat operation
@@ -49,7 +49,7 @@ const inputReducer = (state = INITIAL_STATE, action) => {
         let newState = {
           start: false,
           operation: [evaluation],
-          result: evaluation,
+          output: evaluation,
           toRepeat: [evaluation, ...toRepeat],
         };
         return { ...INITIAL_STATE, ...newState };
@@ -108,8 +108,8 @@ const inputReducer = (state = INITIAL_STATE, action) => {
         operating: false,
         currentOperand,
         operation,
-        output: [...operation, currentOperand],
-        result: '',
+        operationDisplay: [...operation, currentOperand],
+        output: currentOperand,
       };
 
     // ********* DECIMAL ********* //
@@ -128,7 +128,7 @@ const inputReducer = (state = INITIAL_STATE, action) => {
         if (currentOperand === 0) {
           decFix = '0.';
         } else {
-          decFix = output.pop();
+          decFix = operationDisplay.pop();
           decFix += '.';
         }
         // operand will now add decimal places
@@ -140,8 +140,8 @@ const inputReducer = (state = INITIAL_STATE, action) => {
           operating: false,
           currentOperand,
           operation,
-          output: [...output, decFix],
-          result: '',
+          operationDisplay: [...operationDisplay, decFix],
+          output: currentOperand + '.',
         };
       } else {
         // otherwise, do nothing
@@ -160,8 +160,8 @@ const inputReducer = (state = INITIAL_STATE, action) => {
           ...state,
           start: false,
           isNeg: true,
-          output: [...output, input],
-          result: '',
+          operationDisplay: [...operationDisplay, input],
+          output: input,
         };
       }
       // if there's already an operator
@@ -171,8 +171,8 @@ const inputReducer = (state = INITIAL_STATE, action) => {
           return {
             ...state,
             isNeg: true,
-            output: [...output, input],
-            result: '',
+            operationDisplay: [...operationDisplay, input],
+            output: input,
           };
         }
         // but the other operators will just take over
@@ -182,7 +182,7 @@ const inputReducer = (state = INITIAL_STATE, action) => {
         operation.push(input);
         // but if we're not operating,
       } else {
-        // and we've carried over a previous result,
+        // and we've carried over a previous output,
         if (newOperand && operation.length === 1) {
           // add just the inputed operator (no extra 0)
           operation.push(input);
@@ -202,9 +202,9 @@ const inputReducer = (state = INITIAL_STATE, action) => {
         isNeg: false,
         currentOperand: 0,
         operation: [...operation],
-        output: [...operation],
+        operationDisplay: [...operation],
         toRepeat: [],
-        result: '',
+        output: input,
       };
 
     // only on initialization

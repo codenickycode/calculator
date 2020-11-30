@@ -7,9 +7,8 @@ export const INITIAL_STATE = {
   isNeg: false, // sign of currentOperand will be negative (ex: input: 9+-3, currentOperand: -3)
   currentOperand: 0, // current operand being built
   operation: [0], // operation to be evaluated (ex: [number, string, number, string, ...])
-  operationDisplay: [], // operation formatted for <Display />
-  output: '0', // current input / full expression
-  result: '', // only truthy immediately after evaluation
+  operationDisplay: [], // operation formatted for <OperationDisplay />
+  output: 0, // current input or evaluation for <Output />
   toRepeat: [], // previous operation to repeat (ex: ['+',1] ['*', 365])
 };
 

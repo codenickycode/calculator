@@ -2,7 +2,7 @@ import React from 'react';
 import { store } from '../index.js';
 import { actionInput } from '../redux/actions';
 import Buttons from './Buttons.js';
-import { DisplayContainer } from './Display.js';
+import { OutputContainer, OperationContainer } from './Display.js';
 
 class Calculator extends React.Component {
   constructor(props) {
@@ -23,9 +23,9 @@ class Calculator extends React.Component {
 
     return (
       <>
-        <DisplayContainer />
+        <OutputContainer />
         <Buttons />
-        <div id='dummy'></div>
+        <OperationContainer />
       </>
     );
   }
