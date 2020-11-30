@@ -7,20 +7,40 @@ class Display extends React.Component {
   }
   render() {
     // console.log('rendering <Display/>');
-
-    let { output } = this.props;
+    let { output, result } = this.props;
     // chop the leading 0 if it wasn't added explicitly
     if (output.length === 2 && output[0] === 0 && !isNaN(output[1])) {
       output.shift(0);
     }
     output = output.toString();
     output = output.replaceAll(',', ' ');
+    let display = output;
+    let divId = 'display-op';
+    let pId = 'output-op';
+    if (result) {
+      display = result.toString();
+      divId = 'display-eval';
+      pId = 'output-eval';
+    }
+    // font size
+    let width = window.innerWidth;
+    let size = 6;
+    // small screen media query
+    if (width <= 768) {
+      size = 18 - display.length * 0.7;
+      if (display.length < 7) {
+        size = 18;
+      }
+      if (size < 6) {
+        size = 6;
+      }
+    }
+    let sizeRem = size + 'vw';
+    let fontSize = { fontSize: sizeRem };
     return (
-      <div id='display' className='display'>
-        {/* if new expression, display nothing,
-          else display operation or evaluation */}
-        <p id='output' className='display'>
-          {output.length === 0 ? null : output}
+      <div id={divId} className='display'>
+        <p id={pId} className='display' style={fontSize}>
+          {display}
         </p>
       </div>
     );
@@ -29,5 +49,6 @@ class Display extends React.Component {
 
 const displayProps = (state) => ({
   output: state.inputReducer.output,
+  result: state.inputReducer.result,
 });
 export const DisplayContainer = connect(displayProps)(Display);

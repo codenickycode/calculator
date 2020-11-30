@@ -8,6 +8,8 @@
 
 :root {
   font-family: 'Orbitron', sans-serif;
+  font-weight: 200;
+  font-size: 12px;
 }
 
 body {
@@ -19,6 +21,11 @@ body {
   overflow: hidden;
   background-color: black;
   color: white;
+}
+
+#dummy {
+  height: 100%;
+  border: 1px solid red;
 }
 
 /* <Calculator /> */
@@ -34,39 +41,50 @@ body {
 }
 
 /* display div */
-/* #display {
-  visibility: hidden;
-  max-width: 100%;
-  width: 350px;
-  height: 200px;
+#display-op,
+#display-eval {
+  margin: 1rem;
+  max-width: 400px;
+  height: 100%;
   background-color: black;
-  display: flex;
-  align-items: center;
   direction: rtl;
-} */
+  display: flex;
+  align-items: flex-end;
+  border: 1px solid gold;
+}
+
+#display-op {
+  max-width: 400px;
+}
+
+#display-eval {
+  max-width: 100%;
+  /* justify-content: center; */
+}
 
 /* display p */
-/* #output {
+#output-op,
+#output-eval {
   direction: ltr;
   font-family: inherit;
+  font-weight: inherit;
   color: white;
-  font-size: 3rem;
-  line-height: 2rem;
   white-space: nowrap;
-} */
+  border: 1px solid blue;
+}
 
 /* <Buttons /> */
 #grid {
+  border: 1px solid white;
   width: 98%;
-  height: auto;
-  max-width: 550px;
+  height: 100%;
+  max-width: 400px;
   min-width: 250px;
   display: grid;
   justify-content: center;
   align-items: center;
   grid-gap: 3px;
   grid-template-columns: 1fr 1fr 1fr 1fr;
-  /* grid-template-rows: 1fr 1fr 1fr 1fr 1fr; */
   grid-template-areas:
     ' clear   clear   divide   mult'
     ' seven   eight    nine    min'

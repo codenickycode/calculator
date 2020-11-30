@@ -38,13 +38,10 @@ const inputReducer = (state = INITIAL_STATE, action) => {
       // save last part for repeat
       toRepeat = operation.slice(-2);
       // let the evaluation begin!
-      // console.time('evaluation');
       let evaluation = evaluateArray(...operation);
-      console.timeEnd('syEvaluation');
-      // console.timeEnd('evaluation');
       if (isNaN(evaluation)) {
         // re-init and output error message
-        return { ...INITIAL_STATE, output: evaluation };
+        return { ...INITIAL_STATE, result: evaluation };
       } else {
         // re-initialize,
         // carry over evaluation and toRepeat operation
@@ -52,7 +49,7 @@ const inputReducer = (state = INITIAL_STATE, action) => {
         let newState = {
           start: false,
           operation: [evaluation],
-          output: [evaluation],
+          result: evaluation,
           toRepeat: [evaluation, ...toRepeat],
         };
         return { ...INITIAL_STATE, ...newState };
@@ -112,6 +109,7 @@ const inputReducer = (state = INITIAL_STATE, action) => {
         currentOperand,
         operation,
         output: [...operation, currentOperand],
+        result: '',
       };
 
     // ********* DECIMAL ********* //
@@ -143,6 +141,7 @@ const inputReducer = (state = INITIAL_STATE, action) => {
           currentOperand,
           operation,
           output: [...output, decFix],
+          result: '',
         };
       } else {
         // otherwise, do nothing
@@ -162,6 +161,7 @@ const inputReducer = (state = INITIAL_STATE, action) => {
           start: false,
           isNeg: true,
           output: [...output, input],
+          result: '',
         };
       }
       // if there's already an operator
@@ -172,6 +172,7 @@ const inputReducer = (state = INITIAL_STATE, action) => {
             ...state,
             isNeg: true,
             output: [...output, input],
+            result: '',
           };
         }
         // but the other operators will just take over
@@ -203,6 +204,7 @@ const inputReducer = (state = INITIAL_STATE, action) => {
         operation: [...operation],
         output: [...operation],
         toRepeat: [],
+        result: '',
       };
 
     // only on initialization

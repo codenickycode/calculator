@@ -8,7 +8,8 @@ export const INITIAL_STATE = {
   currentOperand: 0, // current operand being built
   operation: [0], // operation to be evaluated (ex: [number, string, number, string, ...])
   operationDisplay: [], // operation formatted for <Display />
-  output: '0', // current input or evaluated result
+  output: '0', // current input / full expression
+  result: '', // only truthy immediately after evaluation
   toRepeat: [], // previous operation to repeat (ex: ['+',1] ['*', 365])
 };
 

@@ -25,6 +25,7 @@ class Calculator extends React.Component {
       <>
         <DisplayContainer />
         <Buttons />
+        <div id='dummy'></div>
       </>
     );
   }

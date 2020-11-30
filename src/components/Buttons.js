@@ -38,7 +38,7 @@ class Buttons extends React.Component {
   }
 
   render() {
-    console.log('rendering <buttons/>');
+    // console.log('rendering <buttons/>');
     const buttons = buttonProps.map((b) => (
       <ButtonContainer
         key={b.id}
