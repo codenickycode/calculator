@@ -1,3 +1,4 @@
+import Decimal from 'decimal.js';
 import React from 'react';
 import { connect } from 'react-redux';
 
@@ -18,6 +19,16 @@ class Display extends React.Component {
     let divId = 'display-op';
     let pId = 'output-op';
     if (result) {
+      if (typeof result !== 'string') {
+        result = Decimal(
+          Decimal(result).toPrecision(9, Decimal.ROUND_HALF_UP)
+        ).toDecimalPlaces(9, Decimal.ROUND_HALF_UP);
+        if (result > 999999999) {
+          result = result.toExponential(3);
+        }
+        console.log(typeof result);
+      }
+
       display = result.toString();
       divId = 'display-eval';
       pId = 'output-eval';

@@ -9,7 +9,7 @@ class Button extends React.Component {
   }
 
   render() {
-    console.log(`rendering <Button ${this.props.id}/>`);
+    // console.log(`rendering <Button ${this.props.id}/>`);
     return (
       <div
         id={this.props.id}

@@ -13,4 +13,4 @@ export const INITIAL_STATE = {
   toRepeat: [], // previous operation to repeat (ex: ['+',1] ['*', 365])
 };
 
-export const MAX_INPUT_LENGTH = 14;
+export const MAX_INPUT_LENGTH = 9;
