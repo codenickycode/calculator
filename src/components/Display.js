@@ -19,13 +19,12 @@ export class Output extends React.Component {
       output = output.toString();
     }
     // font size
-    let size = 6;
-    if (window.innerWidth > 420) {
-      if (output.length > 5) {
-        size = 6 - output.length * 0.25;
-      }
-    } else if (output.length > 13) {
-      size = 6 - output.length * 0.15;
+    let size = 4;
+    if (output.length > 6) {
+      size = 4 - output.length * 0.15;
+    }
+    if (output.length > 13) {
+      size = 4 - output.length * 0.15;
     }
     let sizeRem = size + 'rem';
     let fontSize = { fontSize: sizeRem };

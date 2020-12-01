@@ -41,9 +41,11 @@ class Calculator extends React.Component {
     console.log('rendering <Calculator/>');
     return (
       <>
-        <Output output={this.state.output} />
+        <div id='display'>
+          <Operation operationDisplay={this.state.operationDisplay} />
+          <Output output={this.state.output} />
+        </div>
         <Buttons click={this.buttonPress} />
-        <Operation operationDisplay={this.state.operationDisplay} />
       </>
     );
   }

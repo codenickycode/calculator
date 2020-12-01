@@ -16,7 +16,7 @@ class Button extends React.PureComponent {
           className={this.props.class}
           onTouchStart={() => this.props.click(this.props.input)}
         >
-          {this.props.svg}
+          {this.props.label}
         </div>
       );
     } else {
@@ -26,7 +26,7 @@ class Button extends React.PureComponent {
           className={this.props.class}
           onClick={() => this.props.click(this.props.input)}
         >
-          {this.props.svg}
+          {this.props.label}
         </div>
       );
     }

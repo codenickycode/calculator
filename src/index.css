@@ -4,38 +4,31 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  /* border: 1px dotted magenta; */
+  border: 1px dotted magenta;
 }
 
 :root {
   font-family: 'Orbitron', sans-serif;
   font-weight: 200;
-  font-size: 12px;
+  font-size: 16px;
   --primary: #ff5e5e;
   --secondary: #4a2525;
 }
-@media (max-width: 420px) {
+@media (max-width: 320px) {
   :root {
-    font-size: 8px;
+    font-size: 12px;
   }
-}
-@media (max-width: 374px) {
-  :root {
-    font-size: 6px;
-  }
-}
-
-html,
-body {
-  height: 100%;
-  width: 100%;
 }
 
 html {
+  width: 100vw;
+  height: 100vh;
   padding: env(safe-area-inset);
 }
 
 body {
+  height: 100%;
+  width: 100%;
   overflow: hidden;
   background-color: black;
   color: white;
@@ -46,12 +39,24 @@ body {
   width: 100%;
   max-width: 400px;
   height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  border: 1px solid red;
 }
-/* @media (orientation: landscape) and (max-height: 540px) { */
+@media (orientation: landscape) and (max-height: 540px) {
+  #calculator {
+  }
+}
+
+#display {
+  position: absolute;
+  width: 100%;
+  max-width: 400px;
+  bottom: 65%;
+  border: 1px solid red;
+}
+@media (orientation: landscape) and (max-height: 540px) {
+  #display {
+  }
+}
 
 #output-div,
 #operation-div {
@@ -60,47 +65,66 @@ body {
 }
 
 #output-div {
-  grid-area: output;
   direction: rtl;
   overflow: hidden;
-  background-color: purple;
+  background-color: rgba(255, 0, 255, 0.1);
+}
+@media (orientation: landscape) and (max-height: 540px) {
+  #output-div {
+  }
 }
 
 #output-p {
+  min-height: 4rem;
+  line-height: 4rem;
+  font-size: 6rem;
   text-align: right;
   direction: ltr;
   white-space: nowrap;
-  font-size: 6vw;
-  border: 1px solid red;
+
+  /* border: 1px solid red; */
 }
 
 #operation-div {
-  grid-area: operation;
   overflow: hidden;
-  background-color: blue;
+  background-color: rgba(0, 0, 255, 0.1);
 }
 
 #operation-p {
-  height: 2.5rem;
+  min-height: 2rem;
   font-size: 2rem;
   color: var(--secondary);
+  /* border: 1px solid blue; */
+}
+@media (orientation: landscape) and (max-height: 540px) {
+  #operation-div {
+  }
 }
 
 #buttons {
+  position: absolute;
+  top: 35%;
   width: 100%;
+  max-width: 400px;
   height: 100%;
-  max-height: 400px;
+  max-height: 65%;
   display: grid;
   justify-content: center;
   align-items: center;
   grid-gap: 3px;
   grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
   grid-template-areas:
     ' clear   clear   divide   mult'
     ' seven   eight    nine    min'
     ' four    five     six     plus'
     '  one     two    three    eq'
     ' zero    zero     dec     eq';
+  border: 1px solid gold;
+}
+@media (orientation: landscape) and (max-height: 540px) {
+  #buttons {
+  }
 }
 
 /* button div */
@@ -110,6 +134,12 @@ body {
   min-height: 0;
   min-width: 0;
   display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid var(--secondary);
+  border-radius: 5px;
+  font-size: 2rem;
+  color: var(--primary);
 }
 
 svg {
