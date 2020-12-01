@@ -51,7 +51,7 @@ class Buttons extends React.PureComponent {
         svg={b.svg}
       />
     ));
-    return <div id='grid'>{buttons}</div>;
+    return <div id='buttons'>{buttons}</div>;
   }
 }
 

@@ -1,20 +1,20 @@
-import { ReactComponent as SVGclear } from './svg/buttons/no_shadow/svg-clear.svg';
-import { ReactComponent as SVGdivide } from './svg/buttons/no_shadow/svg-divide.svg';
-import { ReactComponent as SVGmult } from './svg/buttons/no_shadow/svg-mult.svg';
-import { ReactComponent as SVGseven } from './svg/buttons/no_shadow/svg-seven.svg';
-import { ReactComponent as SVGeight } from './svg/buttons/no_shadow/svg-eight.svg';
-import { ReactComponent as SVGnine } from './svg/buttons/no_shadow/svg-nine.svg';
-import { ReactComponent as SVGminus } from './svg/buttons/no_shadow/svg-minus.svg';
-import { ReactComponent as SVGfour } from './svg/buttons/no_shadow/svg-four.svg';
-import { ReactComponent as SVGfive } from './svg/buttons/no_shadow/svg-five.svg';
-import { ReactComponent as SVGsix } from './svg/buttons/no_shadow/svg-six.svg';
-import { ReactComponent as SVGplus } from './svg/buttons/no_shadow/svg-plus.svg';
-import { ReactComponent as SVGone } from './svg/buttons/no_shadow/svg-one.svg';
-import { ReactComponent as SVGtwo } from './svg/buttons/no_shadow/svg-two.svg';
-import { ReactComponent as SVGthree } from './svg/buttons/no_shadow/svg-three.svg';
-import { ReactComponent as SVGzero } from './svg/buttons/no_shadow/svg-zero.svg';
-import { ReactComponent as SVGdec } from './svg/buttons/no_shadow/svg-dec.svg';
-import { ReactComponent as SVGeq } from './svg/buttons/no_shadow/svg-eq.svg';
+import { ReactComponent as SVGclear } from './svg/buttons/svg-clear.svg';
+import { ReactComponent as SVGdivide } from './svg/buttons/svg-divide.svg';
+import { ReactComponent as SVGmult } from './svg/buttons/svg-mult.svg';
+import { ReactComponent as SVGseven } from './svg/buttons/svg-seven.svg';
+import { ReactComponent as SVGeight } from './svg/buttons/svg-eight.svg';
+import { ReactComponent as SVGnine } from './svg/buttons/svg-nine.svg';
+import { ReactComponent as SVGminus } from './svg/buttons/svg-minus.svg';
+import { ReactComponent as SVGfour } from './svg/buttons/svg-four.svg';
+import { ReactComponent as SVGfive } from './svg/buttons/svg-five.svg';
+import { ReactComponent as SVGsix } from './svg/buttons/svg-six.svg';
+import { ReactComponent as SVGplus } from './svg/buttons/svg-plus.svg';
+import { ReactComponent as SVGone } from './svg/buttons/svg-one.svg';
+import { ReactComponent as SVGtwo } from './svg/buttons/svg-two.svg';
+import { ReactComponent as SVGthree } from './svg/buttons/svg-three.svg';
+import { ReactComponent as SVGzero } from './svg/buttons/svg-zero.svg';
+import { ReactComponent as SVGdec } from './svg/buttons/svg-dec.svg';
+import { ReactComponent as SVGeq } from './svg/buttons/svg-eq.svg';
 
 export const buttonProps = [
   {
