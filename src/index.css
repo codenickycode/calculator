@@ -4,19 +4,37 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  border: 1px dotted gold;
 }
 
 :root {
   font-family: 'Orbitron', sans-serif;
   font-weight: 200;
   font-size: 12px;
+  --primary: #ff5e5e;
+  --secondary: #4a2525;
+}
+@media (max-width: 420px) {
+  :root {
+    font-size: 8px;
+  }
+}
+@media (max-width: 374px) {
+  :root {
+    font-size: 6px;
+  }
+}
+
+html {
+  height: 100%;
+  padding: env(safe-area-inset);
 }
 
 body {
-  height: 100vh;
-  height: calc(var(--vh, 1vh) * 100);
+  height: 100%;
   width: 100vw;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   overflow: hidden;
@@ -31,25 +49,45 @@ body {
   height: 100%;
   background-color: black;
   display: flex;
-  overflow: hidden;
   flex-direction: column;
   justify-content: center;
   align-items: center;
 }
+@media (orientation: landscape) and (max-height: 540px) {
+  #calculator {
+    display: grid;
+    max-width: 100%;
+    justify-content: space-between;
+    grid-template-areas:
+      'buttons operation'
+      'buttons output';
+  }
+}
 
 #output-div,
 #operation-div {
-  margin: 1rem;
   padding-right: 0.5rem;
   width: 100%;
-  /* border: 1px solid red; */
+  min-width: 0;
 }
 
 #output-div {
-  height: 10vh;
+  height: 100%;
   display: flex;
   align-items: flex-end;
   direction: rtl;
+  overflow: hidden;
+}
+
+@media (orientation: landscape) and (max-height: 540px) {
+  #operation-div {
+    height: auto;
+    grid-area: operation;
+  }
+  #output-div {
+    height: auto;
+    grid-area: output;
+  }
 }
 
 #output-p,
@@ -66,37 +104,53 @@ body {
 }
 
 #operation-div {
-  height: 2rem;
+  height: 100%;
+  overflow: hidden;
 }
 
 #operation-p {
   font-size: 2rem;
+  color: var(--secondary);
 }
 
 /* <Buttons /> */
 #grid {
   width: 100%;
-  height: auto;
-  min-width: 250px;
+  height: 100%;
+  min-width: 0;
   display: grid;
   justify-content: center;
   align-items: center;
   grid-gap: 3px;
   grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr 1fr;
   grid-template-areas:
     ' clear   clear   divide   mult'
     ' seven   eight    nine    min'
     ' four    five     six     plus'
     '  one     two    three    eq'
     ' zero    zero     dec     eq';
-  /* border: 1px solid red; */
+}
+@media (orientation: landscape) and (max-height: 540px) {
+  #grid {
+    grid-area: buttons;
+    min-height: 0;
+    min-width: 250px;
+  }
 }
 
 /* button div */
 .btn {
   width: 100%;
+  height: 100%;
   min-width: 0;
-  height: auto;
+  min-height: 0;
+}
+@media (orientation: landscape) and (max-height: 540px) {
+  svg {
+    min-width: 0;
+    min-height: 0;
+  }
 }
 
 /* button svg element */
@@ -104,7 +158,8 @@ body {
 }
 
 /* button svg border path */
-.svg-border {
+.svg-border:hover {
+  stroke: var(--primary);
 }
 
 /* button svg inner text path */

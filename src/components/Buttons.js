@@ -1,4 +1,5 @@
 import React from 'react';
+import { isMobile } from 'react-device-detect';
 import { buttonProps } from './buttonProps.js';
 
 class Button extends React.PureComponent {
@@ -8,16 +9,27 @@ class Button extends React.PureComponent {
 
   render() {
     // console.log(`rendering <Button ${this.props.id}/>`);
-    return (
-      <div
-        id={this.props.id}
-        className={this.props.class}
-        onClick={() => this.props.click(this.props.input)}
-        onTouchStart={() => this.props.click(this.props.input)}
-      >
-        {this.props.svg}
-      </div>
-    );
+    if (isMobile) {
+      return (
+        <div
+          id={this.props.id}
+          className={this.props.class}
+          onTouchStart={() => this.props.click(this.props.input)}
+        >
+          {this.props.svg}
+        </div>
+      );
+    } else {
+      return (
+        <div
+          id={this.props.id}
+          className={this.props.class}
+          onClick={() => this.props.click(this.props.input)}
+        >
+          {this.props.svg}
+        </div>
+      );
+    }
   }
 }
 

@@ -1,6 +1,6 @@
-<svg viewBox="0 0 83 74" fill="none" xmlns="http://www.w3.org/2000/svg">
+<svg height="100%" width="100%" viewBox="0 0 83 74" fill="none" xmlns="http://www.w3.org/2000/svg">
 <g id="svg-dec">
-<path id="Rectangle 1" d="M1.3416 6C1.3416 3.23857 3.58017 1 6.3416 1H76.8926C79.654 1 81.8926 3.23858 81.8926 6V68C81.8926 70.7614 79.654 73 76.8926 73H6.34159C3.58017 73 1.3416 70.7614 1.3416 68V6Z" stroke="#4A2525" stroke-width="2"/>
+<path class="svg-border" id="Rectangle 1" d="M1.3416 6C1.3416 3.23857 3.58017 1 6.3416 1H76.8926C79.654 1 81.8926 3.23858 81.8926 6V68C81.8926 70.7614 79.654 73 76.8926 73H6.34159C3.58017 73 1.3416 70.7614 1.3416 68V6Z" stroke="#4A2525" stroke-width="2"/>
 <path id="." d="M39.7953 43V40.904H41.8913V43H39.7953Z" fill="#FF5E5E"/>
 </g>
 </svg>
