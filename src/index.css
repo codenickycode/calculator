@@ -188,13 +188,7 @@ body {
   border-radius: 5px;
   font-size: 2rem;
   color: var(--primary);
-}
-
-.btn {
   background-color: rgba(255, 255, 255, 0.05);
-  /* for shine effect */
-  /* overflow: hidden; */
-  position: relative;
 }
 
 .btnhover {

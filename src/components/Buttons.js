@@ -12,6 +12,10 @@ class Button extends React.PureComponent {
   }
   componentDidMount() {
     this.getBtnNode();
+    document.addEventListener(this.props.input, this.handleClick);
+  }
+  componentWillUnmount() {
+    document.removeEventListener(this.props.input, this.handleClick);
   }
   getBtnNode() {
     this.btnNode = document.getElementById(this.props.id);
@@ -30,7 +34,7 @@ class Button extends React.PureComponent {
   }
 
   render() {
-    // console.log(`rendering <Button ${this.props.id}/>`);
+    console.log(`rendering <Button ${this.props.id}/>`);
     if (isMobile) {
       return (
         <div
@@ -61,6 +65,16 @@ class Button extends React.PureComponent {
 class Buttons extends React.PureComponent {
   constructor(props) {
     super(props);
+    this.handleKeydown = this.handleKeydown.bind(this);
+  }
+  componentDidMount() {
+    document.addEventListener('keydown', this.handleKeydown);
+  }
+  componentWillUnmount() {
+    document.removeEventListener('keydown', this.handleKeydown);
+  }
+  handleKeydown(e) {
+    document.dispatchEvent(new CustomEvent(e.key));
   }
 
   render() {

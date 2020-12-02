@@ -8,20 +8,11 @@ class Calculator extends React.Component {
     super(props);
     this.state = this.INITIAL_STATE();
     this.buttonPress = this.buttonPress.bind(this);
-    this.handleKeydown = this.handleKeydown.bind(this);
   }
   buttonPress(input) {
     this.setState(inputReducer(input, this.state, this.INITIAL_STATE));
   }
-  componentDidMount() {
-    document.addEventListener('keydown', this.handleKeydown);
-  }
-  componentWillUnmount() {
-    document.removeEventListener('keydown', this.handleKeydown);
-  }
-  handleKeydown(e) {
-    this.buttonPress(e.key);
-  }
+
   INITIAL_STATE = () => ({
     newOperand: true, // if false, numerical input builds on currentOperand
     decimal: false, // true when adding decimal places to currentOperand
@@ -37,7 +28,7 @@ class Calculator extends React.Component {
   });
 
   render() {
-    // console.clear();
+    console.clear();
     // console.log('rendering <Calculator/>');
     return (
       <>
