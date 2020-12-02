@@ -1,5 +1,5 @@
 import evaluateArray from './evaluateArray.js';
-export const MAX_INPUT_LENGTH = 9;
+export const MAX_INPUT_LENGTH = 14;
 
 function inputReducer(input, state, INITIAL_STATE) {
   let { newOperand, decimal, decPlace, operating, isNeg } = state;

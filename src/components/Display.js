@@ -9,25 +9,33 @@ export class Output extends React.Component {
   render() {
     // console.log('rendering <Display/>');
     let { output } = this.props;
-    if (typeof output !== 'string') {
+    if (!isNaN(output)) {
       output = Decimal(
-        Decimal(output).toPrecision(9, Decimal.ROUND_HALF_UP)
-      ).toDecimalPlaces(9, Decimal.ROUND_HALF_UP);
-      if (output > 999999999) {
+        Decimal(output).toPrecision(14, Decimal.ROUND_HALF_UP)
+      ).toDecimalPlaces(14, Decimal.ROUND_HALF_UP);
+      if (
+        output > 99999999999999 ||
+        (output < -99999999999999 && output !== 0)
+      ) {
         output = output.toExponential(3);
       }
       output = output.toString();
     }
     // font size
     let size = 4;
-    if (output.length > 6) {
-      size = 4 - output.length * 0.15;
+    if (window.innerWidth < 540 || window.innerHeight <= 540) {
+      if (output.length > 1) {
+        size = 4 - output.length * 0.15;
+      }
+    } else if (window.innerWidth < 900 || window.innerHeight < 768) {
+      if (output.length > 1) {
+        size = 4 - output.length * 0.1;
+      }
     }
-    if (output.length > 13) {
-      size = 4 - output.length * 0.15;
-    }
+
     let sizeRem = size + 'rem';
     let fontSize = { fontSize: sizeRem };
+    console.log(typeof output);
     return (
       <div id='output-div' className='display'>
         <p id='output-p' className='display' style={fontSize}>

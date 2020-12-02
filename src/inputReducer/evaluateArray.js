@@ -1,4 +1,4 @@
-import Decimal from 'decimal.js-light';
+import Decimal from 'decimal.js';
 
 function evaluateArray(...array) {
   if (array.length % 2 === 0) throw new Error('Invalid Format 1');

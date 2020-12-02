@@ -10,20 +10,55 @@
 :root {
   font-family: 'Orbitron', sans-serif;
   font-weight: 200;
-  font-size: 16px;
+  font-size: 10px;
   --primary: #ff5e5e;
   --secondary: #4a2525;
 }
-@media (max-width: 320px) {
+@media (orientation: portrait) and (min-width: 320px) {
   :root {
     font-size: 12px;
   }
 }
+@media (orientation: portrait) and (min-width: 360px) {
+  :root {
+    font-size: 14px;
+  }
+}
+@media (orientation: portrait) and (min-width: 400px) {
+  :root {
+    font-size: 16px;
+  }
+}
+@media (orientation: portrait) and (min-width: 769px) {
+  :root {
+    font-size: 18px;
+  }
+}
 
+@media (orientation: landscape) and (min-width: 640px) {
+  :root {
+    font-size: 12px;
+  }
+}
+@media (orientation: landscape) and (min-width: 731px) {
+  :root {
+    font-size: 14px;
+  }
+}
+@media (orientation: landscape) and (min-width: 1024px) {
+  :root {
+    font-size: 16px;
+  }
+}
+@media (orientation: landscape) and (min-width: 1366px) {
+  :root {
+    font-size: 22px;
+  }
+}
 html {
-  width: 100vw;
-  height: 100vh;
-  padding: env(safe-area-inset);
+  width: 100%;
+  height: 100%;
+  /* padding: env(safe-area-inset); */
 }
 
 body {
@@ -37,24 +72,31 @@ body {
 #calculator {
   margin: 0 auto;
   width: 100%;
-  max-width: 400px;
+  max-width: 600px;
   height: 100%;
-  border: 1px solid red;
+  /* border: 1px solid red; */
 }
 @media (orientation: landscape) and (max-height: 540px) {
   #calculator {
+    max-width: 100%;
   }
 }
 
 #display {
   position: absolute;
+  height: 35%;
   width: 100%;
-  max-width: 400px;
+  max-width: 600px;
   bottom: 65%;
-  border: 1px solid red;
+  /* border: 1px solid blue; */
 }
 @media (orientation: landscape) and (max-height: 540px) {
   #display {
+    width: 50%;
+    max-width: 50%;
+    height: 100%;
+    bottom: 0;
+    right: 50%;
   }
 }
 
@@ -65,12 +107,18 @@ body {
 }
 
 #output-div {
-  direction: rtl;
-  overflow: hidden;
-  background-color: rgba(255, 0, 255, 0.1);
+  position: fixed;
+  bottom: 83%;
+  right: 50%;
+  transform: translate(50%, 50%);
+  /* background-color: rgba(255, 0, 255, 0.1); */
 }
 @media (orientation: landscape) and (max-height: 540px) {
   #output-div {
+    width: 50%;
+    bottom: 50%;
+    right: 50%;
+    transform: translate(0, 50%);
   }
 }
 
@@ -78,34 +126,27 @@ body {
   min-height: 4rem;
   line-height: 4rem;
   font-size: 6rem;
-  text-align: right;
-  direction: ltr;
-  white-space: nowrap;
+  text-align: center;
 
   /* border: 1px solid red; */
 }
 
 #operation-div {
+  max-height: 100%;
   overflow: hidden;
-  background-color: rgba(0, 0, 255, 0.1);
+  /* background-color: rgba(0, 0, 255, 0.1); */
 }
 
 #operation-p {
-  min-height: 2rem;
   font-size: 2rem;
   color: var(--secondary);
-  /* border: 1px solid blue; */
-}
-@media (orientation: landscape) and (max-height: 540px) {
-  #operation-div {
-  }
 }
 
 #buttons {
   position: absolute;
   top: 35%;
   width: 100%;
-  max-width: 400px;
+  max-width: 600px;
   height: 100%;
   max-height: 65%;
   display: grid;
@@ -120,10 +161,15 @@ body {
     ' four    five     six     plus'
     '  one     two    three    eq'
     ' zero    zero     dec     eq';
-  border: 1px solid gold;
+  /* border: 1px solid gold; */
 }
+
 @media (orientation: landscape) and (max-height: 540px) {
   #buttons {
+    max-height: 100%;
+    max-width: 50%;
+    top: 0;
+    left: 50%;
   }
 }
 
@@ -140,24 +186,6 @@ body {
   border-radius: 5px;
   font-size: 2rem;
   color: var(--primary);
-}
-
-svg {
-  display: block;
-  flex: 1 1 auto;
-}
-
-/* button svg element */
-.svg-button {
-}
-
-/* button svg border path */
-.svg-border:hover {
-  stroke: var(--primary);
-}
-
-/* button svg inner text path */
-.svg-label {
 }
 
 #clear {
