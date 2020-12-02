@@ -7,15 +7,20 @@ export class Output extends React.Component {
     super(props);
   }
   componentDidMount() {
-    window.addEventListener('resize', debounce(this.viewportSize, 150));
+    window.addEventListener(
+      'resize',
+      debounce(this.viewportSize, 150, false, this)
+    );
   }
   componentWillUnmount() {
-    window.removeEventListener('resize', debounce(this.viewportSize, 150));
+    window.removeEventListener(
+      'resize',
+      debounce(this.viewportSize, 150, false, this)
+    );
   }
   viewportSize() {
     let vh = window.innerHeight * 0.01;
     let vw = window.innerWidth * 0.01;
-    console.log(vw, vh);
     document.documentElement.style.setProperty('--vw', `${vw}px`);
     document.documentElement.style.setProperty('--vh', `${vh}px`);
   }
@@ -51,7 +56,6 @@ export class Output extends React.Component {
     }
     let sizeVW = size + 'vw';
     let fontSize = { fontSize: sizeVW };
-    console.log(typeof output);
     return (
       <div id='output-div' className='display'>
         <p id='output-p' className='display' style={fontSize}>

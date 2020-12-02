@@ -38,7 +38,7 @@ class Calculator extends React.Component {
 
   render() {
     // console.clear();
-    console.log('rendering <Calculator/>');
+    // console.log('rendering <Calculator/>');
     return (
       <>
         <div id='display'>

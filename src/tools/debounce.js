@@ -1,14 +1,12 @@
-// from Underscore.js
-function debounce(func, wait, immediate) {
-  var timeout;
+function debounce(func, wait, immediate, context) {
+  let timeout;
   return function () {
-    var context = this,
-      args = arguments;
-    var later = function () {
+    const args = [func, wait, immediate];
+    const later = function () {
       timeout = null;
       if (!immediate) func.apply(context, args);
     };
-    var callNow = immediate && !timeout;
+    const callNow = immediate && !timeout;
     clearTimeout(timeout);
     timeout = setTimeout(later, wait);
     if (callNow) func.apply(context, args);
