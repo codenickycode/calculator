@@ -176,8 +176,8 @@ body {
   }
 }
 
-/* button div */
-.btn {
+.btn,
+.btnpress {
   height: 100%;
   width: 100%;
   min-height: 0;
@@ -189,64 +189,93 @@ body {
   border-radius: 5px;
   font-size: 2rem;
   color: var(--primary);
+}
+
+.btn {
   background-color: rgba(255, 255, 255, 0.05);
   /* for shine effect */
-  overflow: hidden;
+  /* overflow: hidden; */
   position: relative;
 }
 
-.btn::before {
-  content: '';
-  display: block;
-  position: absolute;
-  background: rgba(255, 255, 255, 0.2);
-  width: 50%;
-  height: 100%;
-  top: 0;
-  filter: blur(30px);
-  transform: translateX(-100%) skewX(0);
-  opacity: 0;
-}
-
-.btn::after {
-  content: '';
-  display: block;
-  position: absolute;
-  background: rgba(255, 0, 0, 0.1);
-  width: 100%;
-  height: 100%;
-  top: 0;
-  filter: blur(5px);
-  transform: translateX(-100%) skewX(0);
-  opacity: 0;
-}
-
 .btn:hover {
-  background-image: linear-gradient(
-    90deg,
+  background-image: radial-gradient(
+    ellipse,
     var(--primary-transparent),
     var(--secondary-transparent)
   );
-  background-size: 400% 400%;
-  animation: colorwave 2s infinite alternate;
-  /* transition: 0.1s; */
+  background-size: 300% 300%;
+  animation: colorwave 10s infinite;
 }
 
 @keyframes colorwave {
-  from {
-    background-position: 1% 0%;
+  0% {
+    background-position: 50% 50%;
   }
-  to {
-    background-position: 99% 100%;
+  40% {
+    background-position: 100% 50%;
+  }
+  60% {
+    background-position: 100% 100%;
+  }
+  90% {
+    background-position: 50% 100%;
   }
 }
 
-.btn:hover::before,
-.btn:hover::after {
-  transform: translateX(300%) skewX(0);
-  opacity: 1;
-  transition: 0.5s;
-  /* transition-delay: 25ms; */
+.btnpress {
+  position: absolute;
+  background-color: grey;
+  animation: ghost 150ms linear;
+}
+@keyframes ghost {
+  from {
+    opacity: 1;
+    translate: scale(1);
+  }
+  to {
+    opacity: 0;
+    translate: scale(4);
+  }
+}
+
+.btnpress::before,
+.btnpress::after {
+  content: '';
+  display: block;
+  position: absolute;
+  border-radius: 50%;
+  height: 50%;
+  top: 50%;
+  transform: translateY(-50%) scale(0);
+  opacity: 0;
+  animation: clickeffect 150ms linear;
+}
+
+.btnpress::before {
+  background: rgba(255, 255, 255, 0.1);
+  width: 25%;
+  filter: blur(15px);
+}
+
+.btnpress::after {
+  background: rgba(255, 0, 0, 0.1);
+  width: 100%;
+  filter: blur(15px);
+}
+@keyframes clickeffect {
+  0% {
+    transform: translateY(-50%) scale(0);
+    opacity: 1;
+  }
+  50% {
+    transform: translateY(-50%) scale(2);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-50%) scale(4);
+    opacity: 0;
+  }
 }
 
 #clear {

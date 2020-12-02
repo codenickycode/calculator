@@ -6,28 +6,24 @@ import { buttonProps } from './buttonProps.js';
 class Button extends React.PureComponent {
   constructor(props) {
     super(props);
-    // this.debounce = this.debounce.bind(this);
-    this.getRect = this.getRect.bind(this);
-    this.mouseEnter = this.mouseEnter.bind(this);
-    this.mouseLeave = this.mouseLeave.bind(this);
+    this.getBtnNode = this.getBtnNode.bind(this);
+    this.handleClick = this.handleClick.bind(this);
   }
   componentDidMount() {
-    this.getRect();
-    window.addEventListener('resize', debounce(this.getRect, 150, false, this));
+    this.getBtnNode();
   }
-  componentWillUnmount() {
-    window.removeEventListener(
-      'resize',
-      debounce(this.getRect, 150, false, this)
-    );
+  getBtnNode() {
+    this.btnNode = document.getElementById(this.props.id);
   }
-  getRect() {
-    this.rect = document.getElementById(this.props.id).getBoundingClientRect();
+  handleClick() {
+    this.props.click(this.props.input);
+
+    let newNode = this.btnNode.cloneNode(true);
+    newNode.id = '';
+    newNode.className = 'btnpress';
+    this.btnNode.appendChild(newNode);
+    setTimeout(() => this.btnNode.removeChild(newNode), 150);
   }
-  mouseEnter(e) {
-    console.log(e.clientY, this.rect.top);
-  }
-  mouseLeave(e) {}
 
   render() {
     // console.log(`rendering <Button ${this.props.id}/>`);
@@ -36,9 +32,7 @@ class Button extends React.PureComponent {
         <div
           id={this.props.id}
           className={this.props.class}
-          onMouseEnter={this.mouseEnter}
-          onMouseLeave={this.mouseLeave}
-          onTouchStart={() => this.props.click(this.props.input)}
+          onTouchStart={this.handleClick}
         >
           {this.props.label}
         </div>
@@ -48,9 +42,7 @@ class Button extends React.PureComponent {
         <div
           id={this.props.id}
           className={this.props.class}
-          onMouseEnter={this.mouseEnter}
-          onMouseLeave={this.mouseLeave}
-          onClick={() => this.props.click(this.props.input)}
+          onMouseDown={this.handleClick}
         >
           {this.props.label}
         </div>
