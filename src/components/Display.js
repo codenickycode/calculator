@@ -1,14 +1,29 @@
 import Decimal from 'decimal.js';
+import debounce from '../tools/debounce.js';
 import React from 'react';
 
 export class Output extends React.Component {
   constructor(props) {
     super(props);
   }
+  componentDidMount() {
+    window.addEventListener('resize', debounce(this.viewportSize, 150));
+  }
+  componentWillUnmount() {
+    window.removeEventListener('resize', debounce(this.viewportSize, 150));
+  }
+  viewportSize() {
+    let vh = window.innerHeight * 0.01;
+    let vw = window.innerWidth * 0.01;
+    console.log(vw, vh);
+    document.documentElement.style.setProperty('--vw', `${vw}px`);
+    document.documentElement.style.setProperty('--vh', `${vh}px`);
+  }
 
   render() {
     // console.log('rendering <Display/>');
     let { output } = this.props;
+    // format output to max 14 digits
     if (!isNaN(output)) {
       output = Decimal(
         Decimal(output).toPrecision(14, Decimal.ROUND_HALF_UP)
@@ -21,19 +36,21 @@ export class Output extends React.Component {
       }
       output = output.toString();
     }
-    // font size
-    let size = 4;
-    if (window.innerWidth < 540 || window.innerHeight <= 540) {
-      if (output.length > 1) {
-        size = 4 - output.length * 0.15;
-      }
-    } else if (window.innerWidth < 900 || window.innerHeight < 768) {
-      if (output.length > 1) {
-        size = 4 - output.length * 0.1;
-      }
+
+    let size = 20;
+    if (
+      // mobile portrait or large screens
+      window.innerWidth < window.innerHeight ||
+      (window.innerWidth > 600 && window.innerheight > 540)
+    ) {
+      size = 20 - output.length * 0.9;
+    } else {
+      // mobile landscape
+      size = 12 - output.length * 0.65;
+      if (size < 4) size = 4;
     }
-    let sizeRem = size + 'rem';
-    let fontSize = { fontSize: sizeRem };
+    let sizeVW = size + 'vw';
+    let fontSize = { fontSize: sizeVW };
     console.log(typeof output);
     return (
       <div id='output-div' className='display'>

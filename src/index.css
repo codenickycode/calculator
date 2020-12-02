@@ -10,11 +10,11 @@
 :root {
   font-family: 'Orbitron', sans-serif;
   font-weight: 200;
-  font-size: 10px;
+  font-size: 16px;
   --primary: #ff5e5e;
   --secondary: #4a2525;
 }
-@media (orientation: portrait) and (min-width: 320px) {
+/* @media (orientation: portrait) and (min-width: 320px) {
   :root {
     font-size: 12px;
   }
@@ -54,7 +54,8 @@
   :root {
     font-size: 22px;
   }
-}
+} */
+
 html {
   width: 100%;
   height: 100%;
@@ -138,7 +139,7 @@ body {
 }
 
 #operation-p {
-  font-size: 2rem;
+  font-size: 1.5rem;
   color: var(--secondary);
 }
 
