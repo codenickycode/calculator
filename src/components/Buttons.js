@@ -1,5 +1,4 @@
 import React from 'react';
-import debounce from '../tools/debounce.js';
 import { isMobile } from 'react-device-detect';
 import { buttonProps } from './buttonProps.js';
 
@@ -8,6 +7,8 @@ class Button extends React.PureComponent {
     super(props);
     this.getBtnNode = this.getBtnNode.bind(this);
     this.handleClick = this.handleClick.bind(this);
+    this.mouseEnter = this.mouseEnter.bind(this);
+    this.mouseLeave = this.mouseLeave.bind(this);
   }
   componentDidMount() {
     this.getBtnNode();
@@ -17,12 +18,15 @@ class Button extends React.PureComponent {
   }
   handleClick() {
     this.props.click(this.props.input);
-
-    let newNode = this.btnNode.cloneNode(true);
-    newNode.id = '';
-    newNode.className = 'btnpress';
-    this.btnNode.appendChild(newNode);
-    setTimeout(() => this.btnNode.removeChild(newNode), 150);
+    this.btnNode.classList.remove('btnpress');
+    void this.btnNode.offsetWidth;
+    this.btnNode.classList.add('btnpress');
+  }
+  mouseEnter() {
+    this.btnNode.classList.add('btnhover');
+  }
+  mouseLeave() {
+    this.btnNode.classList.remove('btnhover');
   }
 
   render() {
@@ -33,6 +37,7 @@ class Button extends React.PureComponent {
           id={this.props.id}
           className={this.props.class}
           onTouchStart={this.handleClick}
+          onTouchEnd={this.handleUp}
         >
           {this.props.label}
         </div>
@@ -43,6 +48,8 @@ class Button extends React.PureComponent {
           id={this.props.id}
           className={this.props.class}
           onMouseDown={this.handleClick}
+          onMouseEnter={this.mouseEnter}
+          onMouseLeave={this.mouseLeave}
         >
           {this.props.label}
         </div>
