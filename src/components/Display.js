@@ -32,7 +32,6 @@ export class Output extends React.Component {
         size = 4 - output.length * 0.1;
       }
     }
-
     let sizeRem = size + 'rem';
     let fontSize = { fontSize: sizeRem };
     console.log(typeof output);
