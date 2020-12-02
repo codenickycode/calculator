@@ -24,7 +24,7 @@ export class Output extends React.Component {
     // console.log('rendering <Display/>');
     let { output } = this.props;
     // format output to max 14 digits
-    if (!isNaN(output)) {
+    if (typeof output !== 'string') {
       output = Decimal(
         Decimal(output).toPrecision(14, Decimal.ROUND_HALF_UP)
       ).toDecimalPlaces(14, Decimal.ROUND_HALF_UP);

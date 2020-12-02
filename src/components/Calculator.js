@@ -37,7 +37,7 @@ class Calculator extends React.Component {
   });
 
   render() {
-    console.clear();
+    // console.clear();
     console.log('rendering <Calculator/>');
     return (
       <>
