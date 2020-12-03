@@ -1,6 +1,30 @@
 import React from 'react';
+import { Howl, Howler } from 'howler';
 import { isMobile } from 'react-device-detect';
 import { buttonProps } from './buttonProps.js';
+
+const hoverHowl = new Howl({
+  src: ['./sounds/zapsplat1.mp3'],
+  preload: true,
+  volume: 0.25,
+});
+const numHowl = new Howl({
+  src: ['./sounds/zapsplat2.mp3'],
+  preload: true,
+  volume: 1,
+});
+const opHowl = new Howl({
+  src: ['./sounds/zapsplat4.mp3'],
+  preload: true,
+  volume: 1,
+});
+const eqHowl = new Howl({
+  src: ['./sounds/zapsplat3.mp3'],
+  preload: true,
+  volume: 1,
+});
+Howler.volume(0.15);
+Howler.mute(false);
 
 class Button extends React.PureComponent {
   constructor(props) {
@@ -21,12 +45,20 @@ class Button extends React.PureComponent {
     this.btnNode = document.getElementById(this.props.id);
   }
   handleClick() {
+    if (this.btnNode.classList.contains('num')) {
+      numHowl.play();
+    } else if (this.btnNode.id === 'eq') {
+      eqHowl.play();
+    } else {
+      opHowl.play();
+    }
     this.props.click(this.props.input);
     this.btnNode.classList.remove('btnpress');
-    void this.btnNode.offsetWidth;
+    void this.btnNode.offsetWidth; //reflow
     this.btnNode.classList.add('btnpress');
   }
   mouseEnter() {
+    hoverHowl.play();
     this.btnNode.classList.add('btnhover');
   }
   mouseLeave() {
