@@ -104,6 +104,7 @@ class Buttons extends React.PureComponent {
   }
   componentWillUnmount() {
     document.removeEventListener('keydown', this.handleKeydown);
+    Howler.unload();
   }
   handleKeydown(e) {
     document.dispatchEvent(new CustomEvent(e.key));

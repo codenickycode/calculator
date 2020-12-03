@@ -69,6 +69,22 @@ export class Output extends React.Component {
 export class Operation extends React.Component {
   constructor(props) {
     super(props);
+    this.resetBurn = this.resetBurn.bind(this);
+    this.getOpNewNode = this.getOpNewNode.bind(this);
+  }
+  componentDidMount() {
+    this.getOpNewNode();
+  }
+  componentDidUpdate() {
+    this.resetBurn();
+  }
+  getOpNewNode() {
+    this.opNewNode = document.getElementById('opNew');
+  }
+  resetBurn() {
+    this.opNewNode.classList.remove('burn');
+    void this.opNewNode.offsetWidth;
+    this.opNewNode.classList.add('burn');
   }
   render() {
     let { operationDisplay } = this.props;
@@ -82,11 +98,14 @@ export class Operation extends React.Component {
     }
     operationDisplay = operationDisplay.toString();
     operationDisplay = operationDisplay.replaceAll(',', ' ');
-
+    let operationOld = operationDisplay.slice(0, -1);
+    let operationNew = operationDisplay.slice(-1);
+    console.log(operationOld, '+', operationNew);
     return (
       <div id='operation-div' className='display'>
         <p id='operation-p' className='display'>
-          {operationDisplay}
+          {operationOld}
+          <span id='opNew'>{operationNew}</span>
         </p>
       </div>
     );
